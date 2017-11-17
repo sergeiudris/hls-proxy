@@ -1,0 +1,89 @@
+{
+  "type": "dataset-stream",
+  "name": "demo",
+  "key_id": "name",
+  "key_url": "url",
+  "key_title": "name",
+  "items": [
+    {
+      "name": "bunny",
+      "url": "http://www.wowza.com/_h264/BigBuckBunny_115k.mov"
+    },
+    {
+      "name": "bunny",
+      "url": "http://archive.org/download/SampleMpeg4_201307/sample_mpeg4.mp4"
+    },
+    {
+      "name": "bunny",
+      "url": "rtsp://mpv.cdn3.bigCDN.com:554/bigCDN/mp4:bigbuckbunnyiphone_400.mp4"
+    },
+    {
+      "name": "bunny",
+      "url": "rtsp://mpv.cdn3.bigCDN.com:554/bigCDN/mp4:bigbuckbunnyiphone_400.mp4"
+    },
+    {
+      "name": "bunny",
+      "url": "rtsp://mpv.cdn3.bigCDN.com:554/bigCDN/mp4:bigbuckbunnyiphone_400.mp4"
+    },
+    {
+      "name": "bunny",
+      "url": "rtsp://mpv.cdn3.bigCDN.com:554/bigCDN/mp4:bigbuckbunnyiphone_400.mp4"
+    },
+    {
+      "name": "bunny",
+      "url": "rtsp://mpv.cdn3.bigCDN.com:554/bigCDN/mp4:bigbuckbunnyiphone_400.mp4"
+    },
+    {
+      "name": "bunny",
+      "url": "rtsp://mpv.cdn3.bigCDN.com:554/bigCDN/mp4:bigbuckbunnyiphone_400.mp4"
+    },
+    {
+      "name": "bunny",
+      "url": "rtsp://mpv.cdn3.bigCDN.com:554/bigCDN/mp4:bigbuckbunnyiphone_400.mp4"
+    },
+    {
+      "name": "bunny",
+      "url": "rtsp://mpv.cdn3.bigCDN.com:554/bigCDN/mp4:bigbuckbunnyiphone_400.mp4"
+    },
+    {
+      "name": "bunny",
+      "url": "rtsp://mpv.cdn3.bigCDN.com:554/bigCDN/mp4:bigbuckbunnyiphone_400.mp4"
+    },
+    {
+      "name": "bunny",
+      "url": "rtsp://mpv.cdn3.bigCDN.com:554/bigCDN/mp4:bigbuckbunnyiphone_400.mp4"
+    },
+    {
+      "name": "bunny",
+      "url": "rtsp://mpv.cdn3.bigCDN.com:554/bigCDN/mp4:bigbuckbunnyiphone_400.mp4"
+    },
+    {
+      "name": "bunny",
+      "url": "rtsp://mpv.cdn3.bigCDN.com:554/bigCDN/mp4:bigbuckbunnyiphone_400.mp4"
+    },
+    {
+      "name": "bunny",
+      "url": "rtsp://mpv.cdn3.bigCDN.com:554/bigCDN/mp4:bigbuckbunnyiphone_400.mp4"
+    },
+    {
+      "name": "bunny",
+      "url": "rtsp://mpv.cdn3.bigCDN.com:554/bigCDN/mp4:bigbuckbunnyiphone_400.mp4"
+    },
+    {
+      "name": "bunny",
+      "url": "rtsp://mpv.cdn3.bigCDN.com:554/bigCDN/mp4:bigbuckbunnyiphone_400.mp4"
+    },
+    {
+      "name": "bunny",
+      "url": "rtsp://mpv.cdn3.bigCDN.com:554/bigCDN/mp4:bigbuckbunnyiphone_400.mp4"
+    },
+    {
+      "name": "bunny",
+      "url": "rtsp://mpv.cdn3.bigCDN.com:554/bigCDN/mp4:bigbuckbunnyiphone_400.mp4"
+    },
+    {
+      "name": "bunny",
+      "url": "rtsp://mpv.cdn3.bigCDN.com:554/bigCDN/mp4:bigbuckbunnyiphone_400.mp4"
+    }
+  ]
+}

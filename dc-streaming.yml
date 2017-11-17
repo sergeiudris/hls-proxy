@@ -1,0 +1,105 @@
+version: '3'
+services:
+
+  # traefik:
+  #   image: traefik:1.4
+  #   command: --web --docker --docker.domain=docker.localhost --logLevel=DEBUG --accessLogsFile=/var/log/traefik-access.log
+  #   ports:
+  #     # - 80:80
+  #     - 3010:8080
+  #   # - 443:443
+  #   # volumes:
+  #   #   - /var/run/docker.sock:/var/run/docker.sock
+  #   #   - /dev/null:/traefik.toml
+
+  hub:
+    image: ${REGISTRY_HOST}/streaming-hub
+    container_name: streaming-hub
+    depends_on:
+      - types
+    environment:
+      - PORT=${HUB_PORT}
+    env_file:
+      - .env
+    ports:
+      - ${HUB_PORT}:${HUB_PORT}
+    stdin_open: true
+    tty: true
+
+  spawn-ffmpeg:
+    image: ${REGISTRY_HOST}/streaming-spawn-ffmpeg
+    container_name: streaming-spawn-ffmpeg
+    depends_on:
+      - types
+    environment:
+      - PORT=${SPAWN_FFMPEG_PORT}
+    env_file:
+      - .env
+    ports:
+      - ${SPAWN_FFMPEG_PORT}:${SPAWN_FFMPEG_PORT}
+    stdin_open: true
+    tty: true
+
+  ui:
+    image: ${REGISTRY_HOST}/streaming-ui
+    container_name: streaming-ui
+    depends_on:
+      - types
+    environment:
+      - PORT=${UI_PORT}
+    env_file:
+      - .env
+    ports:
+      - ${HLS_WEBUI_PORT}:${HLS_WEBUI_PORT}
+    stdin_open: true
+    tty: true
+
+  cam-move:
+    image: ${REGISTRY_HOST}/streaming-cam-move
+    container_name: streaming-cam-move
+    ports:
+      - ${CAM_MOVE_PORT}:${CAM_MOVE_PORT}
+    depends_on:
+      - types
+    environment:
+      - PORT=${CAM_MOVE_PORT}
+    env_file:
+      - .env
+    stdin_open: true
+    tty: true
+
+  cam-health:
+    image: ${REGISTRY_HOST}/streaming-cam-health
+    container_name: streaming-cam-health
+    depends_on:
+      - types
+    environment:
+      - PORT=${CAM_HEALTH_PORT}
+    env_file:
+      - .env
+    ports:
+      - ${CAM_HEALTH_PORT}:${CAM_HEALTH_PORT}
+    stdin_open: true
+    tty: true
+
+  data:
+    image: ${REGISTRY_HOST}/streaming-data
+    container_name: streaming-data
+    depends_on:
+      - types
+    environment:
+      - PORT=${DATA_PORT}
+    env_file:
+      - .env
+    ports:
+      - ${DATA_PORT}:${DATA_PORT}
+    stdin_open: true
+    tty: true
+
+  types:
+    image: ${REGISTRY_HOST}/streaming-types
+    container_name: streaming-types
+    env_file:
+      - .env
+    stdin_open: true
+    tty: true

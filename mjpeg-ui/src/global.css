@@ -1,0 +1,10 @@
+.box-orange{
+  padding: 0.5em;
+  border: 1px solid coral;
+  border-radius: 3px;
+}
+.box-gray{
+  padding: 0.5em;
+  border: 1px solid #eee;
+  border-radius: 3px;
+}

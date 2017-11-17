@@ -1,0 +1,35 @@
+#FROM node:boron
+FROM node:9.1.0-alpine
+
+# FROM ubuntu:16.04
+
+# RUN apt-get update && apt-get install -y software-properties-common
+# RUN add-apt-repository ppa:jonathonf/ffmpeg-3
+# RUN apt-get update && apt-get install -y ffmpeg libav-tools x264 x265
+# Install "ffmpeg"
+# RUN add-apt-repository ppa:mc3man/trusty-media
+# RUN apt-get update && apt-get install -y ffmpeg
+# FROM node:8.1.0-alpine
+
+
+# RUN apt-get -qq update && apt-get install --no-install-recommends -qqy \
+#     curl \
+#     ca-certificates \
+#     openssh-client \
+#     git
+
+
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+COPY . /usr/src/app
+# COPY ./dist /usr/src/app
+RUN  npm rebuild
+RUN  ls
+#./node_modules/.bin
+RUN  npm run build
+
+
+# Bundle app source
+EXPOSE 1805
+EXPOSE 1100
+CMD [ "npm", "start" ]

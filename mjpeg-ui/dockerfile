@@ -1,0 +1,27 @@
+#FROM node:boron
+# FROM node:6.11.1-slim
+FROM node:8.1.0-alpine
+
+
+# RUN apt-get -qq update && apt-get install --no-install-recommends -qqy \
+#     curl \
+#     ca-certificates \
+#     openssh-client \
+#     git
+
+
+RUN mkdir -p /usr/src/app
+
+WORKDIR /usr/src/app
+
+COPY package.json /usr/src/app
+
+RUN yarn
+
+COPY . /usr/src/app
+
+RUN npm run build
+
+EXPOSE 1801
+
+CMD [ "npm", "start" ]

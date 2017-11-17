@@ -1,0 +1,32 @@
+{
+  "name": "streaming",
+  "version": "0.0.0",
+  "description": "streaming proxy server",
+  "main": "",
+  "scripts": {
+    "cz": "git add . && git-cz",
+    "release": "standard-version",
+    "docker:up": "docker-compose -f docker-compose-dev.yml up -d",
+    "docker:down": "docker-compose -f docker-compose-dev.yml down --remove-orphans",
+    "lerna": "lerna",
+    "dep": "lerna bootstrap && lerna run dep",
+    "build": "lerna run --parallel build",
+    "dev": "lerna run --parallel dev",
+    "start": "npm run dep && lerna run --parallel start"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "commitizen": "2.9.6",
+    "cross-env": "5.0.5",
+    "cz-conventional-changelog": "2.0.0",
+    "lerna": "2.4.0",
+    "standard-version": "4.2.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  }
+}

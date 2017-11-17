@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  nginx-ts:
+    image: ${REGISTRY_HOST}/nginx-ts
+    container_name: streaming-nginx-ts
+
+  nginx-rtmp:
+    image: ${REGISTRY_HOST}/nginx-rtmp
+    container_name: streaming-nginx-rtmp

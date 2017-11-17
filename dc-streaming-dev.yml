@@ -1,0 +1,62 @@
+version: '3'
+services:
+  hub:
+    build:
+      context: ./hub
+      dockerfile: ./Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}
+        - PORT=${HUB_PORT}
+
+  spawn-ffmpeg:
+    build:
+      context: ./spawn-ffmpeg
+      dockerfile: ./Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}
+        - PORT=${SPAWN_FFMPEG_PORT}
+
+  ui:
+    build:
+      context: ./ui
+      dockerfile: ./Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}
+        - PORT=${UI_PORT}
+
+  cam-move:
+    build:
+      context: ./cam-move
+      dockerfile: ./Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}
+
+  cam-health:
+    build:
+      context: ./cam-health
+      dockerfile: ./Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}
+        - PORT=${CAM_HEALTH_PORT}
+
+  data:
+    build:
+      context: ./data
+      dockerfile: ./Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}
+        - PORT=${DATA_PORT}
+
+  types:
+    build:
+      context: ./types
+      dockerfile: ./Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}

@@ -1,29 +1,41 @@
-# README #
+### deploy ###
 
-This README would normally document whatever steps are necessary to get your application up and running.
 
-### What is this repository for? ###
+* make sure NodeJs 8.6.0 installed
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+* make sure `ffmpeg` terminal command is available
 
-### How do I get set up? ###
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+```shell
 
-### Contribution guidelines ###
+# clone repo
+git clone git@bitbucket.org:gostgroup/bg-rtsp.git
 
-* Writing tests
-* Code review
-* Other guidelines
+# change directory
+cd bg-rtsp
 
-### Who do I talk to? ###
+# checkout master
+git checkout master
 
-* Repo owner or admin
-* Other community or team contact
+# fetch and pull (if you did not clone)
+git fetch
+git pull origin master
+
+# install dependencies with --no-shrinkwrap, use it over npm i to avoid unknown with npm@5^ and package-lock.json
+npm run i
+
+# build everything and then start server using ts-node
+npm run start
+
+# server will be running on port 3004
+
+```
+
+### mjpeg streaming ###
+
+POST /mjpeg/start?url=someMjpegUrl      - start an ffmpeg transcoding process , use src/client/modules/html5-stream/stream-mjpeg.ts to connect on the client
+
+### misc ###
+
+# formats and codecs
+https://gist.githubusercontent.com/granoeste/8727308/raw/678faed77165b9a3e96b0cbbhosta03/webkitmediasource-is-type-supported.html

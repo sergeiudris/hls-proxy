@@ -1,0 +1,12 @@
+[
+  {
+    "title": "rtspcameras",
+    "fileName": "rtspcameras.json",
+    "type": 2
+  },
+  {
+    "title": "httpcameras",
+    "fileName": "httpcameras.json",
+    "type": 3
+  }
+]

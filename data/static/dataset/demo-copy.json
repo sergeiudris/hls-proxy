@@ -1,0 +1,57 @@
+{
+  "type": "dataset-stream",
+  "name": "demo",
+  "key_id": "name",
+  "key_url": "url",
+  "key_title": "name",
+  "items": [
+    {
+      "name": "bunny",
+      "url": "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov"
+    },
+    {
+      "name": "bunny",
+      "url": "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov"
+    },
+    {
+      "name": "bunny",
+      "url": "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov"
+    },
+    {
+      "name": "bunny",
+      "url": "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov"
+    },
+    {
+      "name": "bunny",
+      "url": "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov"
+    },
+    {
+      "name": "bunny",
+      "url": "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov"
+    },
+    {
+      "name": "bunny",
+      "url": "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov"
+    },
+    {
+      "name": "bunny",
+      "url": "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov"
+    },
+    {
+      "name": "bunny",
+      "url": "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov"
+    },
+    {
+      "name": "bunny",
+      "url": "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov"
+    },
+    {
+      "name": "bunny",
+      "url": "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov"
+    },
+    {
+      "name": "bunny",
+      "url": "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov"
+    }
+  ]
+}

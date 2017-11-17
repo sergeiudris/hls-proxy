@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  streaming-nodejs-base:
+    image: ${REGISTRY_HOST}/streaming-nodejs-base
+    container_name: streaming-nodejs-base
+    build:
+      context: ./docker
+      dockerfile: ./nodejs-base.Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}

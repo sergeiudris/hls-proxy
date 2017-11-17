@@ -1,0 +1,35 @@
+{
+  "name": "@streaming/types",
+  "version": "0.0.0",
+  "description": "types",
+  "license": "MIT",
+  "keywords": [],
+  "main": "./dist",
+  "types": "./dist",
+  "files": [
+    "dist",
+    "src",
+    "types",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "clean": "rimraf dist/*",
+    "compile": "npm run clean && tsc",
+    "build": "npm run compile",
+    "dev": "tsc -w"
+  },
+  "devDependencies": {
+    "@types/node": "8.0.46",
+    "@types/webpack": "3.0.13",
+    "@types/uuid": "3.4.3",
+    "@types/winston": "2.3.6",
+    "@types/ws": "3.2.0",
+    "rimraf": "2.6.2",
+    "ts-loader": "3.0.5",
+    "ts-node": "3.3.0",
+    "typescript": "2.5.3"
+  },
+  "peerDependencies": {},
+  "dependencies": {}
+}
