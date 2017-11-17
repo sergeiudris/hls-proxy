@@ -8,6 +8,9 @@
 # lsof -t -i:1806
 # kill -9 1234
 
+#docker rm $(docker ps -a -q)
+#docker rmi -f $(docker images -q)
+
 
 HOST_NAME=host
 USERNAME=user
@@ -58,11 +61,20 @@ deploy(){
 
 
 up(){
-  docker-compose  -f dc-nsq.yml -f dc-streaming.yml -f dc-streaming-dev.yml  up --build -d
+  docker-compose -f dc-base.yml build && \
+  docker-compose \
+    -f dc-nsq.yml \
+    -f dc-nginx.yml -f dc-nginx-build.yml \
+    -f dc-streaming.yml -f dc-streaming-build.yml \
+    up --build --remove-orphans -d
 }
 
 down(){
-  docker-compose  -f dc-nsq.yml -f dc-streaming.yml -f dc-streaming-dev.yml down
+  docker-compose \
+    -f dc-nsq.yml \
+    -f dc-nginx.yml -f dc-nginx-build.yml \
+    -f dc-streaming.yml -f dc-streaming-build.yml \
+   down --remove-orphans
 }
 
 up_prod(){

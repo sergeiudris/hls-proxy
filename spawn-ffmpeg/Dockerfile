@@ -8,9 +8,9 @@ FROM ${NODE_IMAGE} as deps
 ENV dir /usr/src/app
 COPY --from=types ${dir}/ /usr/src/types/
 
-FROM ${REGISTRY_HOST}/streaming-nodejs-base:latest as base
-RUN apt-get update && \
-  apt-get install -y libav-tools && \
-  apt-get install -y ffmpeg
+FROM ${REGISTRY_HOST}/streaming-nodejs-builder as builder
+FROM ${REGISTRY_HOST}/streaming-nodejs-runner as runner
+
 EXPOSE ${PORT}
+
 CMD [ "npm", "start" ]

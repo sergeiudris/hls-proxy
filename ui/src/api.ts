@@ -12,8 +12,8 @@ export namespace api {
   export const HUB_PORT_WS = 1100
   // export const HUB_HOSTNAME = NODE_ENV == 'production' ? 'host' : '127.0.0.1'
 
-  // export const HUB_HOSTNAME = '127.0.0.1'
-  export const HUB_HOSTNAME = 'host'
+  export const HUB_HOSTNAME = '127.0.0.1'
+  // export const HUB_HOSTNAME = 'host'
 
   export const DATA_HOST = `http://host:1825`
 

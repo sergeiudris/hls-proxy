@@ -1,18 +1,14 @@
-ARG REGISTRY_HOST
-ARG NODE_IMAGE
-ARG PORT=1840
-
-FROM ${NODE_IMAGE}
+FROM 2chat/ubuntu:xenial
 
 ENV DEBIAN_FRONTEND noninteractive
-
 ENV PATH $PATH:/usr/local/nginx/sbin
 
 ENV NGINX_VERSION 1.13.3
 ENV NGINX_TS_VERSION 0.1.1
 
-EXPOSE ${PORT}
+EXPOSE 1840
 # EXPOSE 0-65535/udp
+
 
 # create directories
 RUN mkdir /src /config /logs /data
@@ -50,8 +46,7 @@ RUN set -x && \
   --http-log-path=/logs/access.log && \
   make && \
   make install
-COPY ./nginx.conf /config/
-RUN cat /config/nginx.conf
+
 
 WORKDIR /
 CMD "nginx"

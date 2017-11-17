@@ -8,7 +8,7 @@ services:
         - REGISTRY_HOST=${REGISTRY_HOST}
         - NODE_IMAGE=${NODE_IMAGE}
         - PORT=${HUB_PORT}
-
+        - PORT_WSS=${HUB_PORT_WSS}
   spawn-ffmpeg:
     build:
       context: ./spawn-ffmpeg
@@ -35,23 +35,23 @@ services:
         - REGISTRY_HOST=${REGISTRY_HOST}
         - NODE_IMAGE=${NODE_IMAGE}
 
-  cam-health:
-    build:
-      context: ./cam-health
-      dockerfile: ./Dockerfile
-      args:
-        - REGISTRY_HOST=${REGISTRY_HOST}
-        - NODE_IMAGE=${NODE_IMAGE}
-        - PORT=${CAM_HEALTH_PORT}
+  # cam-health:
+  #   build:
+  #     context: ./cam-health
+  #     dockerfile: ./Dockerfile
+  #     args:
+  #       - REGISTRY_HOST=${REGISTRY_HOST}
+  #       - NODE_IMAGE=${NODE_IMAGE}
+  #       - PORT=${CAM_HEALTH_PORT}
 
-  data:
-    build:
-      context: ./data
-      dockerfile: ./Dockerfile
-      args:
-        - REGISTRY_HOST=${REGISTRY_HOST}
-        - NODE_IMAGE=${NODE_IMAGE}
-        - PORT=${DATA_PORT}
+  # data:
+  #   build:
+  #     context: ./data
+  #     dockerfile: ./Dockerfile
+  #     args:
+  #       - REGISTRY_HOST=${REGISTRY_HOST}
+  #       - NODE_IMAGE=${NODE_IMAGE}
+  #       - PORT=${DATA_PORT}
 
   types:
     build:

@@ -19,10 +19,12 @@ services:
       - types
     environment:
       - PORT=${HUB_PORT}
+      - PORT_WSS=${HUB_PORT_WSS}
     env_file:
       - .env
     ports:
       - ${HUB_PORT}:${HUB_PORT}
+      - ${HUB_PORT_WSS}:${HUB_PORT_WSS}
     stdin_open: true
     tty: true
 
@@ -50,7 +52,7 @@ services:
     env_file:
       - .env
     ports:
-      - ${HLS_WEBUI_PORT}:${HLS_WEBUI_PORT}
+      - ${UI_PORT}:${UI_PORT}
     stdin_open: true
     tty: true
 
@@ -68,33 +70,33 @@ services:
     stdin_open: true
     tty: true
 
-  cam-health:
-    image: ${REGISTRY_HOST}/streaming-cam-health
-    container_name: streaming-cam-health
-    depends_on:
-      - types
-    environment:
-      - PORT=${CAM_HEALTH_PORT}
-    env_file:
-      - .env
-    ports:
-      - ${CAM_HEALTH_PORT}:${CAM_HEALTH_PORT}
-    stdin_open: true
-    tty: true
+  # cam-health:
+  #   image: ${REGISTRY_HOST}/streaming-cam-health
+  #   container_name: streaming-cam-health
+  #   depends_on:
+  #     - types
+  #   environment:
+  #     - PORT=${CAM_HEALTH_PORT}
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - ${CAM_HEALTH_PORT}:${CAM_HEALTH_PORT}
+  #   stdin_open: true
+  #   tty: true
 
-  data:
-    image: ${REGISTRY_HOST}/streaming-data
-    container_name: streaming-data
-    depends_on:
-      - types
-    environment:
-      - PORT=${DATA_PORT}
-    env_file:
-      - .env
-    ports:
-      - ${DATA_PORT}:${DATA_PORT}
-    stdin_open: true
-    tty: true
+  # data:
+  #   image: ${REGISTRY_HOST}/streaming-data
+  #   container_name: streaming-data
+  #   depends_on:
+  #     - types
+  #   environment:
+  #     - PORT=${DATA_PORT}
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - ${DATA_PORT}:${DATA_PORT}
+  #   stdin_open: true
+  #   tty: true
 
   types:
     image: ${REGISTRY_HOST}/streaming-types

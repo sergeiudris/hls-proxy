@@ -1,15 +1,9 @@
 ARG NODE_IMAGE
+ARG REGISTRY_HOST
 
-FROM ${NODE_IMAGE} as builder
-# RUN apk add --no-cache --virtual .build-deps python make g++
-WORKDIR /usr/src/app
-COPY ./package.json .
-RUN npm install --no-package-lock
-COPY . .
-RUN npm run compile
+FROM ${NODE_IMAGE} as deps
+WORKDIR /usr/src/
 
-FROM ${NODE_IMAGE}
-ENV dirname /usr/src/app
-WORKDIR ${dirname}/
-COPY --from=builder ${dirname}/package.json ${dirname}/dist/ ${dirname}/
-COPY --from=builder ${dirname}/dist/ ${dirname}/dist/
+FROM ${REGISTRY_HOST}/streaming-nodejs-builder as builder
+FROM ${REGISTRY_HOST}/streaming-nodejs-runner as runner
+

@@ -1,12 +1,21 @@
 version: '3'
 
 services:
-  streaming-nodejs-base:
-    image: ${REGISTRY_HOST}/streaming-nodejs-base
-    container_name: streaming-nodejs-base
+  streaming-nodejs-builder:
+    image: ${REGISTRY_HOST}/streaming-nodejs-builder
+    container_name: streaming-nodejs-builder
     build:
       context: ./docker
-      dockerfile: ./nodejs-base.Dockerfile
+      dockerfile: ./nodejs-builder.Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}
+  streaming-nodejs-runner:
+    image: ${REGISTRY_HOST}/streaming-nodejs-runner
+    container_name: streaming-nodejs-runner
+    build:
+      context: ./docker
+      dockerfile: ./nodejs-runner.Dockerfile
       args:
         - REGISTRY_HOST=${REGISTRY_HOST}
         - NODE_IMAGE=${NODE_IMAGE}

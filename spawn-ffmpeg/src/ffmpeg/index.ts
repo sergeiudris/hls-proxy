@@ -11,7 +11,7 @@ import * as R from 'ramda'
 import { Evt, FFmpeg, Cams, Pkg, Stream, ReadyState } from '@streaming/types'
 import { publishStatus, reader } from '../nsq'
 import { createStreamLogger } from '../logger'
-import { NGINX_TS_HOSTNAME, NGINX_TS_PORT } from '../config'
+import { NGINX_TS_HOSTNAME, NGINX_TS_PORT, HOSTNAME } from '../config'
 import { urlToIdString } from '../url-to-id'
 import { Router, Request, Response, NextFunction } from 'express'
 
@@ -132,5 +132,5 @@ function urlPublishTs(url: string) {
 }
 
 function urlWatchTs(url: string) {
-  return `http://${NGINX_TS_HOSTNAME}:${NGINX_TS_PORT}/play/hls/${urlToIdString(url)}/index.m3u8`
+  return `http://${HOSTNAME}:${NGINX_TS_PORT}/play/hls/${urlToIdString(url)}/index.m3u8`
 }

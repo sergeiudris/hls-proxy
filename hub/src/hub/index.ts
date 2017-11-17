@@ -2,12 +2,12 @@ import { Writer, Reader } from 'nsqjs'
 import { logger } from '../logger'
 import * as WebSocket from 'ws'
 import { Cams, FFmpeg, Evt, Pkg } from '@streaming/types'
-import { PORT_WRTIER, PORT_READER, PORT_WS } from '../config'
+import { NSQD_PORT, NSQD_HOSTNAME, NSQLOOKUPD_HOST, PORT_WSS } from '../config'
 
 
 
 
-export const WRITER = new Writer('127.0.0.1', PORT_WRTIER)
+export const WRITER = new Writer(NSQD_HOSTNAME, NSQD_PORT)
 WRITER.on('ready', () => {
   // w.publish('sample_topic', 'it really tied the room together')
   // w.publish('sample_topic', 'This message gonna arrive 1 sec later.', 1000 as any)
@@ -27,7 +27,7 @@ WRITER.on('closed', () => {
 })
 
 WRITER.on('ready', () => {
-  logger.info(`writer ready, connected to ${PORT_WRTIER}`)
+  logger.info(`writer ready, connected to ${NSQD_PORT}`)
 })
 
 WRITER.on('error', (err) => {
@@ -41,7 +41,7 @@ WRITER.connect()
 
 
 export const READER = new Reader(Pkg.Topic.STREAMING, 'hub', {
-  lookupdHTTPAddresses: `127.0.0.1:${PORT_READER}`,
+  lookupdHTTPAddresses: NSQLOOKUPD_HOST,
   maxInFlight: 1000,
 })
 
@@ -69,7 +69,7 @@ READER.on('message', msg => {
 })
 
 READER.on('nsqd_connected', () => {
-  logger.info(`nsqd_connected, ${PORT_READER}`)
+  logger.info(`nsqd_connected, ${NSQD_PORT}`)
 })
 
 READER.connect()
@@ -79,7 +79,7 @@ READER.connect()
 
 
 export const WSS = new WebSocket.Server({
-  port: PORT_WS
+  port: PORT_WSS
 } as WebSocket.ServerOptions, () => {
   logger.info(`wssHub started, port ${WSS.options.port}`)
 });
