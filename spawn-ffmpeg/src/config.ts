@@ -7,12 +7,13 @@ interface Env {
   NGINX_TS_HOSTNAME: string
   NGINX_TS_PORT: number
   PORT: number
+  HOSTNAME:string
 }
 
 const env: Env & NodeJS.ProcessEnv = process.env as any
 
 export const CHANNEL = 'spawn-ffmpeg'
-export const HOSTNAME = '127.0.0.1'
+export const HOSTNAME = env.HOSTNAME || 'localhost'
 
 export const NSQLOOKUPD_HOSTNAME = env.NSQLOOKUPD_HOSTNAME || HOSTNAME
 export const NSQD_HOSTNAME = env.NSQD_HOSTNAME || HOSTNAME
