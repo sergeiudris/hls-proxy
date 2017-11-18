@@ -1,7 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express'
 import * as path from 'path'
 import * as fs from 'fs'
-import { state } from '../state'
 import * as http from 'http'
 import * as data from '../data'
 import { Cam } from 'onvif'

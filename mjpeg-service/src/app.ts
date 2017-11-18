@@ -7,9 +7,9 @@ import * as cookieParser from 'cookie-parser'
 import * as bodyParser from 'body-parser'
 import * as serveIndex from 'serve-index'
 
-import routeWebm from './route/webm'
+// import routeWebm from './route/webm'
 import routeStream from './route/mjpeg'
-import routeHls from './route/hls'
+// import routeHls from './route/hls'
 
 import routeApi from './route/api'
 import routeData from './route/data'
@@ -44,12 +44,14 @@ app.use(express.static('dist/scripts'))
 app.use('/logs', serveIndex('logs', { icons: true }))
 app.use('/logs', express.static('logs'))
 
-app.use('/webm', routeWebm);
-app.use('/mjpeg', routeStream);
-app.use('/hls', routeHls);
+// app.use('/hls', routeHls);
+
+app.use('/move', routeMove);
+// app.use('/webm', routeWebm);
 app.use('/api', routeApi);
 app.use('/data', routeData);
-app.use('/move', routeMove);
+app.use('/mjpeg', routeStream);
+
 
 app.get('/', (req: express.Request, res: express.Response, next: Function) => {
   res.send('OK')

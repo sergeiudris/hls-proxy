@@ -1,11 +1,10 @@
 import { logger } from './logger'
-import { state } from './state'
+import { PORT } from './config'
 
 Object.assign(process.env, {
   NODE_ENV: process.argv['includes']('--release') ? 'production' : 'development',
 })
 
-const PORT = state.PORT
 
 import app from './app';
 
@@ -18,21 +17,21 @@ Promise.resolve()
   .then(() => {
 
     // shut all stream down evey day
-    setInterval(() => {
+    // setInterval(() => {
 
-      state.streamsFluentMjpeg.forEach((stream) => {
+    //   state.streamsFluentMjpeg.forEach((stream) => {
 
-        try {
+    //     try {
 
-          stream.stop(new Error('dayily manual shutdown'))
+    //       stream.stop(new Error('dayily manual shutdown'))
 
-        } catch (e) {
-          logger.error(e.stack)
-        }
+    //     } catch (e) {
+    //       logger.error(e.stack)
+    //     }
 
-      })
+    //   })
 
-    }, 86400000)
+    // }, 86400000)
 
     app.listen(PORT, () => {
       logger.info('Express server listening on port ' + PORT);

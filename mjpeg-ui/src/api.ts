@@ -7,14 +7,24 @@ declare var NODE_ENV
 
 const isDev = NODE_ENV != 'production'
 
+// interface Env {
+//     NSQLOOKUPD_HOSTNAME: string
+//     NSQD_HOSTNAME: string
+//     NSQADMIN_HOSTNAME: string
+//     NSQLOOKUPD_PORT: number
+//     NSQD_PORT: number
+//     MJPEG_SERVICE_PORT: number
+//     HOSTNAME: string
+//     DATA_PORT: number
+// }
+
+
 export const SERVICE_PORT = 3004
-export const TS_PORT = 1912
-export const RTMP_PORT_RTMP = 1913
-export const RTMP_PORT_HTTP = 1914
-export const SERVICE_HOSTNAME = 'host' // location.hostname // isDev ? 'localhost' : 'host'
+export const SERVICE_HOSTNAME = location.hostname
+export const DATA_PORT = 1825
 
 export const SERVICE_HOST = `http://${SERVICE_HOSTNAME}:${SERVICE_PORT}`
-export const DATA_HOST = `http://host:1825`
+export const DATA_HOST = `http://${SERVICE_HOSTNAME}:${DATA_PORT}`
 
 // export const SERVICE_PORT = 1999
 

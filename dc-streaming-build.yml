@@ -60,3 +60,24 @@ services:
       args:
         - REGISTRY_HOST=${REGISTRY_HOST}
         - NODE_IMAGE=${NODE_IMAGE}
+
+  mjpeg-ui:
+    build:
+      context: ./mjpeg-ui
+      dockerfile: ./Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}
+        - PORT=${MJPEG_UI_PORT}
+
+  mjpeg-service:
+    build:
+      context: ./mjpeg-service
+      dockerfile: ./Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}
+        - PORT=${MJPEG_SERVICE_PORT}
+        - PORT_MIN=${MJPEG_SERVICE_PORT_MIN}
+        - PORT_MAX=${MJPEG_SERVICE_PORT_MAX}
+

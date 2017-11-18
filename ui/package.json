@@ -16,7 +16,8 @@
   },
   "author": "",
   "license": "MIT",
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
     "@streaming/types": "file:../types",
     "axios": "0.17.0",
     "classnames": "2.2.5",
@@ -42,9 +43,7 @@
     "styled-components": "2.2.2",
     "video.js": "6.2.8",
     "videojs-contrib-hls.js": "3.1.0",
-    "videojs-contrib-media-sources": "4.6.1"
-  },
-  "devDependencies": {
+    "videojs-contrib-media-sources": "4.6.1",
     "@types/enzyme": "3.1.1",
     "@types/geojson": "1.0.5",
     "@types/hls.js": "0.7.7",

@@ -36,7 +36,7 @@ export class AppStore {
     }))
 
     this.sock = new Sock({
-      url: `ws://${api.HUB_HOSTNAME}:${api.HUB_PORT_WS}`,
+      url: `ws://${api.HUB_HOSTNAME}:${api.HUB_PORT_WSS}`,
       reconnectInterval: 1000,
       isReconnecting: true,
       // reconnectMaxAttemps: 3

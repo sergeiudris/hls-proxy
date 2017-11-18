@@ -1,27 +1,20 @@
-#FROM node:boron
-# FROM node:6.11.1-slim
-FROM node:8.1.0-alpine
+ARG REGISTRY_HOST
+ARG NODE_IMAGE
+ARG PORT=1801
+ARG CADDY_VERSION=v0.10.10
 
+FROM ${REGISTRY_HOST}/streaming-types as types
 
-# RUN apt-get -qq update && apt-get install --no-install-recommends -qqy \
-#     curl \
-#     ca-certificates \
-#     openssh-client \
-#     git
+FROM ${NODE_IMAGE} as deps
+ENV dir /usr/src/app
+COPY --from=types ${dir}/ /usr/src/types/
 
-
-RUN mkdir -p /usr/src/app
-
+FROM ${REGISTRY_HOST}/streaming-nodejs-builder as builder
+FROM ${REGISTRY_HOST}/streaming-nodejs-runner as runner
 WORKDIR /usr/src/app
-
-COPY package.json /usr/src/app
-
-RUN yarn
-
-COPY . /usr/src/app
-
-RUN npm run build
-
-EXPOSE 1801
-
-CMD [ "npm", "start" ]
+COPY ./Caddyfile ./
+# RUN curl "https://caddyserver.com/download/build?os=linux&arch=amd64&features=DNS%2Cawslambda%2Ccors%2Cexpires%2Cfilemanager%2Cgit%2Chugo%2Cipfilter%2Cjsonp%2Cjwt%2Clocale%2Cmailout%2Cminify%2Cmultipass%2Cprometheus%2Cratelimit%2Crealip%2Csearch%2Cupload%2Ccloudflare%2Cdigitalocean%2Cdnsimple%2Cdyn%2Cgandi%2Cgooglecloud%2Clinode%2Cnamecheap%2Crfc2136%2Croute53%2Cvultr" \
+#   | tar --no-same-owner -C /usr/bin/ -xz caddy
+RUN curl https://getcaddy.com | bash -s personal http.git,dns
+EXPOSE ${PORT}
+CMD [ "caddy", "--conf", "/usr/src/app/Caddyfile" ]

@@ -2,23 +2,37 @@
 import { isObservableArray } from 'mobx'
 import { Cams } from '@streaming/types'
 
-declare var NODE_ENV
+// interface Env {
+//   NSQLOOKUPD_HOSTNAME: string
+//   NSQD_HOSTNAME: string
+//   NSQADMIN_HOSTNAME: string
+//   NSQLOOKUPD_PORT: number
+//   NSQD_PORT: number
+//   HUB_PORT_WSS: number
+//   HUB_PORT: number
+//   HOSTNAME: string
+//   DATA_PORT: number
+// }
+
+
+
 
 export namespace api {
 
   const API_ORIGIN = window.location.origin
 
-  export const HUB_PORT = 1803
-  export const HUB_PORT_WS = 1100
+  export const HUB_PORT = 1805
+  export const HUB_PORT_WSS = 1100
+  export const SERVICE_HOSTNAME = location.hostname
+  export const DATA_PORT = 1825
+
   // export const HUB_HOSTNAME = NODE_ENV == 'production' ? 'host' : '127.0.0.1'
 
-  export const HUB_HOSTNAME = '127.0.0.1'
+  export const HUB_HOSTNAME = location.hostname
   // export const HUB_HOSTNAME = 'host'
 
-  export const DATA_HOST = `http://host:1825`
+  export const DATA_HOST = `http://${SERVICE_HOSTNAME}:${DATA_PORT}`
 
-
-  export const SERVICE_ORIGIN = `http://${HUB_HOSTNAME}:${HUB_PORT}`
 
 
   export const FETCH_PARAMS = {

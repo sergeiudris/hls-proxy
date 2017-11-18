@@ -7,19 +7,18 @@ import 'winston-daily-rotate-file'
 import * as fs from 'fs-extra'
 import { StreamFluentFFmpeg } from '../modules/stream-fluent-ffmpeg'
 
-import { state } from '../state'
+import { PORT_MAX, PORT_MIN } from '../config'
 import { logger as logger_global } from '../logger'
 
 import { createLogger } from './_logger'
 
 
-const MIN_PORT = state.MIN_PORT
-const MAX_PORT = state.MAX_PORT
 const route = Router()
+const STREAMS = new Map<string, StreamFluentFFmpeg>()
 
 route.post('/start', function (req: Request, res: Response, next: NextFunction) {
 
-  portscanner.findAPortNotInUse(MIN_PORT, MAX_PORT, 'localhost')
+  portscanner.findAPortNotInUse(PORT_MIN, PORT_MAX, 'localhost')
     .then((port) => {
       logger.debug('FREE PORT ' + port);
       const url: string = req.query.url;//
@@ -29,7 +28,7 @@ route.post('/start', function (req: Request, res: Response, next: NextFunction) 
         res.json({ error: 'no url provided' })
         return;
       }
-      const stream = state.streamsFluentMjpeg.get(url);
+      const stream = STREAMS.get(url);
       if (stream && !stream.error) {
         console.warn('stream already exists');
         res.json({ port: stream.wss.options.port, error: stream.error || 'undefined' })
@@ -38,7 +37,7 @@ route.post('/start', function (req: Request, res: Response, next: NextFunction) 
 
       if (stream && stream.error) {
         console.warn('stream was down, deleting');
-        state.streamsFluentMjpeg.delete(stream.id);
+        STREAMS.delete(stream.id);
       }
 
       logger.info(`creating ${url} stream`);
@@ -78,14 +77,14 @@ route.post('/start', function (req: Request, res: Response, next: NextFunction) 
         .on('rip', (err, streamId) => {
           // logger.error('stream: onrip');
           // logger.error(streamId, err);
-          state.streamsFluentMjpeg.delete(newStream.id);
+          STREAMS.delete(newStream.id);
           if (!res.finished) {
             res.json({ error: err })
           }
           return true;
         })
 
-      state.streamsFluentMjpeg.set(url, newStream);
+      STREAMS.set(url, newStream);
 
       newStream.start({
         port: port
@@ -106,9 +105,9 @@ route.post('/start', function (req: Request, res: Response, next: NextFunction) 
 route.post('/stop', function (req: Request, res: Response, next: NextFunction) {
   const id = req.query.url;
   try {
-    const stream = state.streamsFluentMjpeg.get(id);
+    const stream = STREAMS.get(id);
     stream.stop(new Error('stop request'))
-    state.streamsFluentMjpeg.delete(stream.id);
+    STREAMS.delete(stream.id);
     res.json({ message: 'stream terminated' });
   } catch (err) {
     res.json({ err: err.message });
@@ -117,9 +116,9 @@ route.post('/stop', function (req: Request, res: Response, next: NextFunction) {
 
 route.post('/stopAll', function (req: Request, res: Response, next: NextFunction) {
   try {
-    state.streamsFluentMjpeg.forEach((stream) => {
+    STREAMS.forEach((stream) => {
       stream.stop(new Error('stop request all'))
-      state.streamsFluentMjpeg.delete(stream.id);
+      STREAMS.delete(stream.id);
     })
   } catch (err) {
     res.json({ err: err.message });
@@ -134,7 +133,7 @@ route.get('/status', function (req: Request, res: Response, next: NextFunction) 
     streams: {}
   };
 
-  state.streamsFluentMjpeg.forEach((stream) => {
+  STREAMS.forEach((stream) => {
 
     json.streams[stream.id] = {
       id: stream.id,
@@ -142,7 +141,7 @@ route.get('/status', function (req: Request, res: Response, next: NextFunction) 
     }
   })
 
-  json.count_streams = state.streamsFluentMjpeg.size;
+  json.count_streams = STREAMS.size;
   res.json(json);
 })
 
