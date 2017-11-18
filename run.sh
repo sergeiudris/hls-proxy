@@ -59,6 +59,30 @@ deploy(){
   done
 }
 
+up_sys(){
+  docker-compose -f dc-sys.yml up -d
+}
+down_sys(){
+  docker-compose -f dc-sys.yml down
+}
+
+dc(){
+    REGISTRY_HOST=127.0.0.1 docker-compose \
+    -f dc-base.yml \
+    -f dc-nsq.yml \
+    -f dc-nginx.yml \
+    -f dc-streaming.yml \
+    "$@"
+}
+dc_dev(){
+  docker-compose \
+    -f dc-base.yml \
+    -f dc-nsq.yml \
+    -f dc-nginx.yml -f dc-nginx-build.yml \
+    -f dc-streaming.yml -f dc-streaming-build.yml \
+    "$@"
+}
+
 
 up(){
   docker-compose -f dc-base.yml build && \

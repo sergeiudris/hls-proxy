@@ -2,7 +2,7 @@ version: '3'
 
 services:
   registry:
-    image: registry:2.6.2
+    image: ${REGISTRY_HOST}/registry
     container_name: registry
     restart: always
     ports:
@@ -18,7 +18,7 @@ services:
     #   - /path/certs:/certs
     #   - /path/auth:/auth
   portainer:
-    image: portainer/portainer:1.15.2
+    image: ${REGISTRY_HOST}/portainer
     container_name: portainer
     restart: always
     command: -H unix:///var/run/docker.sock

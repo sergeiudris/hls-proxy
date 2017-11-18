@@ -2,14 +2,14 @@ version: '3'
 
 services:
   nsqlookupd:
-    image: nsqio/nsq:v1.0.0-compat
+    image: ${REGISTRY_HOST}/nsq
     container_name: streaming-nsqlookupd
     command: /nsqlookupd
     ports:
       - 4160
       - ${NSQLOOKUPD_PORT}
   nsqd:
-    image: nsqio/nsq:v1.0.0-compat
+    image: ${REGISTRY_HOST}/nsq
     container_name: streaming-nsqd
     command: /nsqd --lookupd-tcp-address=nsqlookupd:4160
     depends_on:
@@ -18,7 +18,7 @@ services:
       - ${NSQD_PORT}
       - 4151
   nsqadmin:
-    image: nsqio/nsq:v1.0.0-compat
+    image: ${REGISTRY_HOST}/nsq
     container_name: streaming-nsqadmin
     command: /nsqadmin --lookupd-http-address=nsqlookupd:${NSQLOOKUPD_PORT}
     depends_on:
