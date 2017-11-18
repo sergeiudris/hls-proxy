@@ -84,19 +84,19 @@ services:
   #   stdin_open: true
   #   tty: true
 
-  # data:
-  #   image: ${REGISTRY_HOST}/streaming-data
-  #   container_name: streaming-data
-  #   depends_on:
-  #     - types
-  #   environment:
-  #     - PORT=${DATA_PORT}
-  #   env_file:
-  #     - .env
-  #   ports:
-  #     - ${DATA_PORT}:${DATA_PORT}
-  #   stdin_open: true
-  #   tty: true
+  data:
+    image: ${REGISTRY_HOST}/streaming-data
+    container_name: streaming-data
+    depends_on:
+      - types
+    environment:
+      - PORT=${DATA_PORT}
+    env_file:
+      - .env
+    ports:
+      - ${DATA_PORT}:${DATA_PORT}
+    stdin_open: true
+    tty: true
 
   types:
     image: ${REGISTRY_HOST}/streaming-types

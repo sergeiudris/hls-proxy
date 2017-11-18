@@ -44,14 +44,14 @@ services:
   #       - NODE_IMAGE=${NODE_IMAGE}
   #       - PORT=${CAM_HEALTH_PORT}
 
-  # data:
-  #   build:
-  #     context: ./data
-  #     dockerfile: ./Dockerfile
-  #     args:
-  #       - REGISTRY_HOST=${REGISTRY_HOST}
-  #       - NODE_IMAGE=${NODE_IMAGE}
-  #       - PORT=${DATA_PORT}
+  data:
+    build:
+      context: ./data
+      dockerfile: ./Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}
+        - PORT=${DATA_PORT}
 
   types:
     build:

@@ -10,7 +10,8 @@ COPY --from=types ${dir}/ /usr/src/types/
 
 FROM ${REGISTRY_HOST}/streaming-nodejs-builder as builder
 FROM ${REGISTRY_HOST}/streaming-nodejs-runner as runner
-
+RUN apt-get update && \
+    apt-get install -y libav-tools && \
+    apt-get install -y ffmpeg
 EXPOSE ${PORT}
-
 CMD [ "npm", "start" ]

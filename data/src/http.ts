@@ -10,10 +10,9 @@ import * as serveIndex from 'serve-index'
 import routeFiles from './route/files'
 import routeApi from './route/api'
 
-import { CONFIG } from './config'
+import { PORT } from './config'
 import { logger } from './logger';
 
-const PORT = CONFIG.PORT
 
 const NODE_ENV = process.env.NODE_ENV;
 

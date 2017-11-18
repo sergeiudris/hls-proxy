@@ -66,7 +66,7 @@ up(){
     -f dc-nsq.yml \
     -f dc-nginx.yml -f dc-nginx-build.yml \
     -f dc-streaming.yml -f dc-streaming-build.yml \
-    up --build --remove-orphans -d
+    up --build -d
 }
 
 down(){
@@ -74,7 +74,7 @@ down(){
     -f dc-nsq.yml \
     -f dc-nginx.yml -f dc-nginx-build.yml \
     -f dc-streaming.yml -f dc-streaming-build.yml \
-   down --remove-orphans
+   down
 }
 
 up_prod(){
