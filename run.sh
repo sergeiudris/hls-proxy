@@ -67,7 +67,7 @@ down_sys(){
 }
 
 dc(){
-    REGISTRY_HOST=127.0.0.1 docker-compose \
+    REGISTRY_HOST=127.0.0.1:5001 docker-compose \
     -f dc-base.yml \
     -f dc-nsq.yml \
     -f dc-nginx.yml \
