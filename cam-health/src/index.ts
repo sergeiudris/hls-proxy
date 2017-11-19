@@ -32,7 +32,7 @@ getCams().then(() => {
       if(cam.state.nginx.readyState == ReadyState.OPEN && cam.state.ffmpeg.readyState == ReadyState.OPEN){
         return
       }
-      fetch(urlWatchTs(cam.state.ffmpeg.url_src)).then(r => {
+      fetch(urlWatchTsInnnerNetwork(cam.state.ffmpeg.url_src)).then(r => {
         // logger.info(r.status.toString()) // 200, 400
         // logger.info(r.statusText) // OK  Not Found
         const date = new Date()
@@ -237,6 +237,9 @@ function urlPublishTs(url: string) {
 
 function urlWatchTs(url: string) {
   return `http://${HOSTNAME}:${NGINX_TS_PORT}/play/hls/${urlToIdString(url)}/index.m3u8`
+}
+function urlWatchTsInnnerNetwork(url: string) {
+  return `http://${NGINX_TS_HOSTNAME}:${NGINX_TS_PORT}/play/hls/${urlToIdString(url)}/index.m3u8`
 }
 export function urlToIdString(url: string) {
   return url.replace(/(\/|\\|:|\.)/g, '_')
