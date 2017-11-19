@@ -4,7 +4,7 @@ import { Cams, FFmpeg, Pkg, ReadyState, Stream } from '@streaming/types'
 import fetch from 'node-fetch'
 import { publishFFmpeg, publishStream, reader } from './nsq'
 import { Camera } from './camera'
-import { HOST_TS_PLAY, HOST_TS_PUBLISH, PORT_TS } from './config'
+import { HOSTNAME, NGINX_TS_HOSTNAME, NGINX_TS_PORT } from './config'
 import { app } from './express'
 
 let cams: Cams.CameraInfo[] = []
@@ -232,11 +232,11 @@ function getCams() {
 // }, 10000)
 
 function urlPublishTs(url: string) {
-  return `http://${HOST_TS_PUBLISH}:${PORT_TS}/publish/${urlToIdString(url)}`
+  return `http://${NGINX_TS_HOSTNAME}:${NGINX_TS_PORT}/publish/${urlToIdString(url)}`
 }
 
 function urlWatchTs(url: string) {
-  return `http://${HOST_TS_PLAY}:${PORT_TS}/play/hls/${urlToIdString(url)}/index.m3u8`
+  return `http://${HOSTNAME}:${NGINX_TS_PORT}/play/hls/${urlToIdString(url)}/index.m3u8`
 }
 export function urlToIdString(url: string) {
   return url.replace(/(\/|\\|:|\.)/g, '_')

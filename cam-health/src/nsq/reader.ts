@@ -1,17 +1,17 @@
 import * as nsq from 'nsqjs'
-import { LOOKUPD_HTTP_ADDRESS, CHANNEL } from '../config'
+import { NSQLOOKUPD_HOST, CHANNEL } from '../config'
 import { logger } from '../logger'
 import { Pkg } from '@streaming/types'
 
 export const reader = new nsq.Reader(Pkg.Topic.STREAMING, CHANNEL, {
-  lookupdHTTPAddresses: LOOKUPD_HTTP_ADDRESS,
+  lookupdHTTPAddresses: NSQLOOKUPD_HOST,
   maxInFlight: 1000,
   // maxAttempts:1,
   lookupdPollInterval: 10,
 })
 
 reader.on('nsqd_connected', () => {
-  logger.info(`reader ${CHANNEL} connected  ${LOOKUPD_HTTP_ADDRESS}`)
+  logger.info(`reader ${CHANNEL} connected  ${NSQLOOKUPD_HOST}`)
 })
 
 reader.connect()

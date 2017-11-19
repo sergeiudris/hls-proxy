@@ -70,19 +70,19 @@ services:
     stdin_open: true
     tty: true
 
-  # cam-health:
-  #   image: ${REGISTRY_HOST}/streaming-cam-health
-  #   container_name: streaming-cam-health
-  #   depends_on:
-  #     - types
-  #   environment:
-  #     - PORT=${CAM_HEALTH_PORT}
-  #   env_file:
-  #     - .env
-  #   ports:
-  #     - ${CAM_HEALTH_PORT}:${CAM_HEALTH_PORT}
-  #   stdin_open: true
-  #   tty: true
+  cam-health:
+    image: ${REGISTRY_HOST}/streaming-cam-health
+    container_name: streaming-cam-health
+    depends_on:
+      - types
+    environment:
+      - PORT=${CAM_HEALTH_PORT}
+    env_file:
+      - .env
+    ports:
+      - ${CAM_HEALTH_PORT}:${CAM_HEALTH_PORT}
+    stdin_open: true
+    tty: true
 
   data:
     image: ${REGISTRY_HOST}/streaming-data

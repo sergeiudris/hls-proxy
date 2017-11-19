@@ -2,11 +2,11 @@ import * as nsq from 'nsqjs'
 import { logger } from '../logger'
 import { Evt, FFmpeg, Pkg } from '@streaming/types'
 
-import { LOOKUPD_HTTP_ADDRESS, HOST_NAME, PORT_WRITER, CHANNEL } from '../config'
+import { NSQLOOKUPD_HOST, NSQD_PORT, NSQD_HOSTNAME, CHANNEL } from '../config'
 
-export const writer = new nsq.Writer(HOST_NAME, PORT_WRITER)
+export const writer = new nsq.Writer(NSQD_HOSTNAME, NSQD_PORT)
   .on('ready', () => {
-    logger.info(`writer ${CHANNEL} connected  ${PORT_WRITER}`)
+    logger.info(`writer ${CHANNEL} connected  ${NSQD_PORT}`)
     // w.publish('sample_topic', 'it really tied the room together')
     // w.publish('sample_topic', 'This message gonna arrive 1 sec later.', 1000 as any)
     // w.publish('sample_topic', [
