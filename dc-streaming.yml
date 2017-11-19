@@ -75,6 +75,7 @@ services:
     container_name: streaming-cam-health
     depends_on:
       - types
+      - data
     environment:
       - PORT=${CAM_HEALTH_PORT}
     env_file:
