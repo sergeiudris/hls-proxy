@@ -4,7 +4,7 @@ import { Cams, FFmpeg, Pkg, ReadyState, Stream } from '@streaming/types'
 import fetch from 'node-fetch'
 import { publishFFmpeg, publishStream, reader } from './nsq'
 import { Camera } from './camera'
-import { HOSTNAME, NGINX_TS_HOSTNAME, NGINX_TS_PORT } from './config'
+import { HOSTNAME, NGINX_TS_HOSTNAME, NGINX_TS_PORT, DATA_HOSTNAME, DATA_PORT } from './config'
 import { app } from './express'
 
 let cams: Cams.CameraInfo[] = []
@@ -210,8 +210,8 @@ function getCamera(id: string, url: string) {
 function getCams() {
 
   return Promise.all<Cams.Dataset, Cams.Dataset>([
-    fetch('http://host:1825/dataset-2/httpcameras.json').then(r => r.json()),
-    fetch('http://host:1825/dataset-2/rtspcameras.json').then(r => r.json())
+    fetch(`http://${DATA_HOSTNAME}:${DATA_PORT}/dataset-2/httpcameras.json`).then(r => r.json()),
+    fetch(`http://${DATA_HOSTNAME}:${DATA_PORT}/dataset-2/rtspcameras.json`).then(r => r.json())
   ])
     .then(([kre, int]) => {
       cams = kre.items.concat(int.items)
