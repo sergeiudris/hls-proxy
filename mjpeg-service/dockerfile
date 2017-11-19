@@ -4,8 +4,10 @@ ARG PORT=3004
 ARG PORT_MIN=1101
 ARG PORT_MAX=1400
 
-
-
+FROM ${NODE_IMAGE} as base
+RUN apt-get update && \
+  apt-get install -y libav-tools && \
+  apt-get install -y ffmpeg
 # FROM ${REGISTRY_HOST}/streaming-types:latest as types
 
 FROM ${NODE_IMAGE} as deps
@@ -13,10 +15,12 @@ WORKDIR /usr/src/
 
 FROM ${REGISTRY_HOST}/streaming-nodejs-builder as builder
 
-FROM ${REGISTRY_HOST}/streaming-nodejs-runner as runner
-RUN apt-get update && \
-    apt-get install -y libav-tools && \
-    apt-get install -y ffmpeg
+FROM base
+WORKDIR /usr/src/app
+COPY --from=deps /usr/src /usr/src
+COPY ./package.json .
+RUN npm install --no-package-lock --production
+COPY --from=builder /usr/src/app/dist/ ./dist/
 EXPOSE ${PORT}
-EXPOSE 1101-1400
+EXPOSE 1101-1201
 CMD [ "npm", "start" ]

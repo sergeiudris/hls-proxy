@@ -2,6 +2,7 @@ ARG REGISTRY_HOST
 ARG NODE_IMAGE
 ARG PORT=1808
 
+
 FROM ${REGISTRY_HOST}/streaming-types:latest as types
 
 FROM ${NODE_IMAGE} as deps

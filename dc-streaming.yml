@@ -51,6 +51,7 @@ services:
     container_name: streaming-ui
     depends_on:
       - types
+      - data
     environment:
       - PORT=${UI_PORT}
     env_file:
@@ -139,6 +140,7 @@ services:
       - ${MJPEG_UI_PORT}:${MJPEG_UI_PORT}
     depends_on:
       - types
+      - data
     environment:
       - PORT=${MJPEG_UI_PORT}
     env_file:
