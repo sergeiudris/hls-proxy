@@ -17,6 +17,8 @@ services:
     container_name: streaming-hub
     depends_on:
       - types
+      - nsqlookupd
+      - nsqd
     environment:
       - PORT=${HUB_PORT}
       - PORT_WSS=${HUB_PORT_WSS}
@@ -33,6 +35,8 @@ services:
     container_name: streaming-spawn-ffmpeg
     depends_on:
       - types
+      - nsqlookupd
+      - nsqd
     environment:
       - PORT=${SPAWN_FFMPEG_PORT}
     env_file:
@@ -63,6 +67,8 @@ services:
       - ${CAM_MOVE_PORT}:${CAM_MOVE_PORT}
     depends_on:
       - types
+      - nsqlookupd
+      - nsqd
     environment:
       - PORT=${CAM_MOVE_PORT}
     env_file:
@@ -75,6 +81,8 @@ services:
     container_name: streaming-cam-health
     depends_on:
       - types
+      - nsqlookupd
+      - nsqd
       - data
     environment:
       - PORT=${CAM_HEALTH_PORT}
