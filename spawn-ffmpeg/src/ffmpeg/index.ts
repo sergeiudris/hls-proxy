@@ -87,7 +87,7 @@ function startStream(url: string) {
     input: url,
     output: urlPublishTs(url),
     inputOptions: ['-y', '-rtsp_transport tcp'],
-    outputOptions: ["-c:v libx264", "-s 1280x720", "-b:v 3600k", "-f mpegts"]
+    outputOptions: ["-c:v libx264", "-s 1280x720", "-b:v 800k", "-f mpegts"]
   }
   const options = url.startsWith('rtsp') ? optionsRtsp : optionsHttp
 

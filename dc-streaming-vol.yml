@@ -1,0 +1,35 @@
+version: '3'
+services:
+  hub:
+    volumes:
+      - ./hub/src:/usr/src/app/src
+  spawn-ffmpeg:
+    volumes:
+      - ./spawn-ffmpeg/src:/usr/src/app/src
+  ui:
+    volumes:
+      - ./src:/usr/src/app/src
+  cam-move:
+    volumes:
+      - ./src:/usr/src/app/src
+
+  cam-health:
+    volumes:
+      - ./src:/usr/src/app/src
+
+  data:
+    volumes:
+      - ./src:/usr/src/app/src
+
+  types:
+    volumes:
+      - ./src:/usr/src/app/src
+
+  mjpeg-ui:
+    volumes:
+      - ./src:/usr/src/app/src
+
+  mjpeg-service:
+    volumes:
+      - ./src:/usr/src/app/src
+
