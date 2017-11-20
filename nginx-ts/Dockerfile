@@ -51,7 +51,5 @@ RUN set -x && \
   make && \
   make install
 COPY ./nginx.conf /config/
-RUN cat /config/nginx.conf
-
 WORKDIR /
 CMD "nginx"

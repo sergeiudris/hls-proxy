@@ -37,5 +37,9 @@ POST /mjpeg/start?url=someMjpegUrl      - start an ffmpeg transcoding process , 
 
 ### misc ###
 
+
+rtspcameras src bitrate 6500k - 7000k
+
+
 # formats and codecs
 https://gist.githubusercontent.com/granoeste/8727308/raw/678faed77165b9a3e96b0cbbhosta03/webkitmediasource-is-type-supported.html

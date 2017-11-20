@@ -77,7 +77,7 @@ export class App extends React.Component<any, IState & any>{
             {NODE_ENV == 'development' && <DevTools />}
             <Router history={history}>
               <Switch>
-                <Route exact path={`/`} render={() => <Redirect to={'/ffmpeg-board'} />} />
+                <Route exact path={`/`} render={() => <Redirect to={'/stream-board'} />} />
                 <Route path={`/stream-board`} component={ViewStreamBoard} />
                 <Route path={`/ffmpeg-board`} component={ViewFFmpegBoard} />
                 <Route path={`/settings`} component={ViewSettings} />

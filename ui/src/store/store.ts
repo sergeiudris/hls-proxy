@@ -25,7 +25,7 @@ export class AppStore {
   @observable.shallow datasetsInfo: Cams.DatasetInfo[] = []
   @observable.shallow datasets: Map<string, Cams.CameraInfo[]> = new Map()
   @observable.shallow cams: Cams.CameraInfo[] = []
-  @observable datasetSelectedFilename: string = 'httpcameras.json'
+  @observable datasetSelectedFilename: string = 'rtspcameras.json'
 
   constructor(history: History) {
     this.history = history

@@ -190,10 +190,17 @@ size(){
 }
 
 
-hls(){
+hls_remote(){
   ssh -t $HOST_SSH "
      sudo ffmpeg  -y -rtsp_transport tcp -i  rtsp://host:554/57 -c:v libx264 -s 1280x720 -b:v 600k -threads 1 -f mpegts http://127.0.0.1:1840/publish/asd
   "
+}
+
+
+hls(){
+  # ffmpeg  -y -rtsp_transport tcp -i rtsp://host:554/57 -c:v libx264 -s 1280x720 -b:v 600k -threads 1 -f mpegts http://host:1840/publish/asd
+  ffmpeg  -y -rtsp_transport tcp -i rtsp://host:554/57 -c:v libx264 -s 1280x720 -f mpegts http://host:1840/publish/asd
+
 }
 
 
