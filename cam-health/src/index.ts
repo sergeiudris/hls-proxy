@@ -37,13 +37,14 @@ getCams().then(() => {
         // logger.info(r.statusText) // OK  Not Found
         const date = new Date()
         const readyState = r.status == 200 ? ReadyState.OPEN : ReadyState.CLOSED
-        const ps = {
+        const ps: Partial<Stream.State> = {
           nginx: {
             ...cam.state.nginx,
             readyState: readyState,
             last_healthcheck: date.getTime(),
             last_healthcheck_str: date.toString(),
-            last_status: r.status
+            last_status: r.status,
+            msg: 'readyState set by cam-health helthcheck routine'
           }
         }
         cam.setState(ps)

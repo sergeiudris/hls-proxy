@@ -39,8 +39,22 @@ build(){
   $lerna run build
 }
 
-
 deploy(){
+  sh run.sh dc pull && \
+  sh run.sh dc up -d
+}
+
+deploy_remote(){
+  dc_dev build && \
+  dc_dev push && \
+  ssh -t $HOST_SSH "
+    cd /opt/streaming;
+    sudo sh run.sh dc pull;
+    sudo sh run.sh dc up -d;
+  "
+}
+
+deploy_legacy(){
   dirUser=""
   dirRoot=""
   for service in "$@"
