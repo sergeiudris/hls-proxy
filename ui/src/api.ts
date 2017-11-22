@@ -48,6 +48,6 @@ export namespace api {
   export const fetchDatasetsInfo = () => fetchJson<Cams.DatasetInfo[]>(`${DATA_HOST}/datasets.json`)
 
   export const fetchDataset = (name: string) => fetchJson<{ items: Cams.CameraInfo[] }>(`${DATA_HOST}/dataset-2/${name}`)
-  export const terminateAllStreams = () => fetchJson<any[]>(`${SPAWN_FFMPEG_HOSTNAME}:${}/stop-all`)
+  export const terminateAllStreams = () => fetchJson<any[]>(`${SPAWN_FFMPEG_HOST}/stop-all`)
 
 }
