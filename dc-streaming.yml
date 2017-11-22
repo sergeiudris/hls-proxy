@@ -3,14 +3,14 @@ services:
 
   # traefik:
   #   image: traefik:1.4
-  #   command: --web --docker --docker.domain=docker.localhost --logLevel=DEBUG --accessLogsFile=/var/log/traefik-access.log
+  #   command: --web --docker --docker.domain=docker.localhost --logLevel=DEBUG
   #   ports:
-  #     # - 80:80
-  #     - 3010:8080
-  #   # - 443:443
-  #   # volumes:
-  #   #   - /var/run/docker.sock:/var/run/docker.sock
-  #   #   - /dev/null:/traefik.toml
+  #   - "8000:80"
+  #   - "8080:8080"
+  #   - "443:443"
+  #   volumes:
+  #   - /var/run/docker.sock:/var/run/docker.sock
+  #   - /dev/null:/traefik.toml
 
   hub:
     image: ${REGISTRY_HOST}/streaming-hub
@@ -27,6 +27,7 @@ services:
     ports:
       - ${HUB_PORT}:${HUB_PORT}
       - ${HUB_PORT_WSS}:${HUB_PORT_WSS}
+    restart: on-failure
     stdin_open: true
     tty: true
 
@@ -43,6 +44,7 @@ services:
       - .env
     ports:
       - ${SPAWN_FFMPEG_PORT}:${SPAWN_FFMPEG_PORT}
+    restart: on-failure
     stdin_open: true
     tty: true
 
@@ -60,6 +62,12 @@ services:
       - ${UI_PORT}:${UI_PORT}
     stdin_open: true
     tty: true
+    # labels:
+    # - traefik.port=${UI_PORT}
+    # # - "traefik.backend=ui"
+    # - traefik.frontend.rule=HostRegexp:ui.{domain:.*}
+    # # - traefik.frontend.rule=Path:/ui
+    # # - traefik.frontend.rule=Host:docker.localhost;Path:/ui/
 
   cam-move:
     image: ${REGISTRY_HOST}/streaming-cam-move
@@ -74,6 +82,7 @@ services:
       - PORT=${CAM_MOVE_PORT}
     env_file:
       - .env
+    restart: on-failure
     stdin_open: true
     tty: true
 
@@ -91,6 +100,7 @@ services:
       - .env
     ports:
       - ${CAM_HEALTH_PORT}:${CAM_HEALTH_PORT}
+    restart: on-failure
     stdin_open: true
     tty: true
 
@@ -105,6 +115,7 @@ services:
       - .env
     ports:
       - ${DATA_PORT}:${DATA_PORT}
+    restart: on-failure
     stdin_open: true
     tty: true
 
@@ -130,6 +141,7 @@ services:
       - PORT_MAX=${MJPEG_SERVICE_PORT_MAX}
     env_file:
       - .env
+    restart: on-failure
     stdin_open: true
     tty: true
 
