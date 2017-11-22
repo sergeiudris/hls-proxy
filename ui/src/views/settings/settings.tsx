@@ -10,6 +10,8 @@ import MenuIcon from 'material-ui-icons/Menu'
 import { Cams } from '@streaming/types'
 import { inject, observer } from 'mobx-react'
 import { AppStore } from 'src/store'
+import { api } from 'src/api'
+
 
 
 interface IProps {
@@ -34,6 +36,13 @@ export const ViewSettings =
     inject(({ store }) => ({ store }))(
       observer(
         class extends React.Component<IProps & WithStyles<"container">, IState> {
+
+          onClickTermiateAll = () => {
+            api.terminateAllStreams().then((r) => {
+              console.warn('terminated all streams', r)
+            })
+          }
+
           render() {
             const { classes } = this.props
             return (
@@ -43,6 +52,11 @@ export const ViewSettings =
                   <Grid className={classes.container} container spacing={24} alignItems="center" >
                     <Grid item xs={12} >
                       <Typography>settings</Typography>
+                    </Grid>
+                    <Grid item xs={12} >
+                      <Button raised dense onClick={this.onClickTermiateAll}>
+                        terminate all streams
+                    </Button>
                     </Grid>
                   </Grid>
                 </AppContent>

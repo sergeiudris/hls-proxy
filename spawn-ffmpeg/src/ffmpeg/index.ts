@@ -31,6 +31,13 @@ app.get('/status', (req, res, next) => {
   res.json(Array.from(STREAMS.keys()));
 })
 
+app.get('/stop-all', (req, res, next) => {
+  STREAMS.forEach((stream) => {
+    stopStream(stream.state.id)
+  })
+  res.json(Array.from(STREAMS.keys()));
+})
+
 reader
   .on('message', msg => {
     const pkg: Pkg<Pkg.FFmpeg> = JSON.parse(msg.body.toString())

@@ -25,7 +25,7 @@ export namespace api {
   export const HUB_PORT_WSS = 1100
   export const SERVICE_HOSTNAME = location.hostname
   export const DATA_PORT = 1825
-
+  export const SPAWN_FFMPEG_HOST = `http://${location.hostname}:${1806}`
   // export const HUB_HOSTNAME = NODE_ENV == 'production' ? 'host' : '127.0.0.1'
 
   export const HUB_HOSTNAME = location.hostname
@@ -48,5 +48,6 @@ export namespace api {
   export const fetchDatasetsInfo = () => fetchJson<Cams.DatasetInfo[]>(`${DATA_HOST}/datasets.json`)
 
   export const fetchDataset = (name: string) => fetchJson<{ items: Cams.CameraInfo[] }>(`${DATA_HOST}/dataset-2/${name}`)
+  export const terminateAllStreams = () => fetchJson<any[]>(`${SPAWN_FFMPEG_HOSTNAME}:${}/stop-all`)
 
 }

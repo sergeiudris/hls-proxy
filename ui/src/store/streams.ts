@@ -35,7 +35,7 @@ export class StreamsState {
   }
 
   get streams() {
-    return this.streamSets.get(this.root.datasetSelectedFilename)
+    return this.streamSets.get(this.root.datasetSelectedFilename) || []
   }
 
   @action
