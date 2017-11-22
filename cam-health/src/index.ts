@@ -10,7 +10,8 @@ import { app } from './express'
 let cams: Cams.CameraInfo[] = []
 const CAMERAS = new Map<string, Camera>()
 let intervalID: any
-const INTERVAL = 1000
+const INTERVAL = 2000
+
 
 getCams().then(() => {
   cams.forEach((cam, i) => {
@@ -20,34 +21,35 @@ getCams().then(() => {
 
   })
 
-
-
-
   intervalID = setInterval(() => {
     CAMERAS.forEach((c) => {
       const cam = c
       if (cam.state.ffmpeg.readyState != ReadyState.OPEN) {
         return
       }
-      if(cam.state.nginx.readyState == ReadyState.OPEN && cam.state.ffmpeg.readyState == ReadyState.OPEN){
-        return
-      }
+      // if(cam.state.nginx.readyState == ReadyState.OPEN && cam.state.ffmpeg.readyState == ReadyState.OPEN){
+      //   return
+      // }
       fetch(urlWatchTsInnnerNetwork(cam.state.ffmpeg.url_src)).then(r => {
         // logger.info(r.status.toString()) // 200, 400
         // logger.info(r.statusText) // OK  Not Found
-        const date = new Date()
-        const readyState = r.status == 200 ? ReadyState.OPEN : ReadyState.CLOSED
-        const ps: Partial<Stream.State> = {
-          nginx: {
-            ...cam.state.nginx,
-            readyState: readyState,
-            last_healthcheck: date.getTime(),
-            last_healthcheck_str: date.toString(),
-            last_status: r.status,
-            msg: 'readyState set by cam-health helthcheck routine'
+        r.text().then((i3u8)=>{
+          const date = new Date()
+          const isClosing = i3u8.includes('EXT-X-ENDLIST')
+          const readyState = r.status != 200 ? ReadyState.CLOSED : (isClosing ? ReadyState.CLOSING: ReadyState.OPEN)
+          const ps: Partial<Stream.State> = {
+            nginx: {
+              ...cam.state.nginx,
+              readyState: readyState,
+              last_healthcheck: date.getTime(),
+              last_healthcheck_str: date.toString(),
+              last_status: r.status,
+              msg: 'readyState set by cam-health helthcheck routine'
+            }
           }
-        }
-        cam.setState(ps)
+          cam.setState(ps)
+        })
+
       })
       // cams.forEach((info, i) => {
       //   const cam = getCamera(info.version.object.cam_url, info.version.object.cam_url)
@@ -117,10 +119,17 @@ function onPkgStream(pkg: Pkg<Pkg.Stream>) {
   }
 
   if (pkg.data.type == Stream.Type.STOP) {
+    // cam.setState({
+    //   nginx: {
+    //     ...cam.state.nginx,
+    //     readyState: ReadyState.CLOSING
+    //   }
+    // })
     publishFFmpeg({
       type: FFmpeg.Type.STOP,
       state: cam.state.ffmpeg,
     }, Pkg.Type.CMD)
+
     //
   }
 

@@ -82,7 +82,7 @@ export class Camera extends events.EventEmitter {
       this.state.readyState = ReadyState.CONNECTING
     } else if (this.state.ffmpeg.readyState == ReadyState.CLOSED && this.state.nginx.readyState == ReadyState.OPEN) {
       this.state.readyState = ReadyState.CLOSING
-    } else if (this.state.ffmpeg.readyState == ReadyState.CLOSING) {
+    } else if (this.state.ffmpeg.readyState == ReadyState.CLOSING || this.state.nginx.readyState == ReadyState.CLOSING) {
       this.state.readyState = ReadyState.CLOSING
     }
     else {
