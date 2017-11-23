@@ -30,6 +30,14 @@ services:
     restart: on-failure
     stdin_open: true
     tty: true
+    build:
+      context: ./hub
+      dockerfile: ./Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}
+        - PORT=${HUB_PORT}
+        - PORT_WSS=${HUB_PORT_WSS}
 
   spawn-ffmpeg:
     image: ${REGISTRY_HOST}/streaming-spawn-ffmpeg
@@ -47,6 +55,13 @@ services:
     restart: on-failure
     stdin_open: true
     tty: true
+    build:
+      context: ./spawn-ffmpeg
+      dockerfile: ./Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}
+        - PORT=${SPAWN_FFMPEG_PORT}
 
   ui:
     image: ${REGISTRY_HOST}/streaming-ui
@@ -68,6 +83,14 @@ services:
     # - traefik.frontend.rule=HostRegexp:ui.{domain:.*}
     # # - traefik.frontend.rule=Path:/ui
     # # - traefik.frontend.rule=Host:docker.localhost;Path:/ui/
+    build:
+      context: ./ui
+      dockerfile: ./Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}
+        - PORT=${UI_PORT}
+
 
   cam-move:
     image: ${REGISTRY_HOST}/streaming-cam-move
@@ -85,6 +108,13 @@ services:
     restart: on-failure
     stdin_open: true
     tty: true
+    build:
+      context: ./cam-move
+      dockerfile: ./Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}
+
 
   cam-health:
     image: ${REGISTRY_HOST}/streaming-cam-health
@@ -103,6 +133,13 @@ services:
     restart: on-failure
     stdin_open: true
     tty: true
+    build:
+      context: ./cam-health
+      dockerfile: ./Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}
+        - PORT=${CAM_HEALTH_PORT}
 
   data:
     image: ${REGISTRY_HOST}/streaming-data
@@ -118,6 +155,13 @@ services:
     restart: on-failure
     stdin_open: true
     tty: true
+    build:
+      context: ./data
+      dockerfile: ./Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}
+        - PORT=${DATA_PORT}
 
   types:
     image: ${REGISTRY_HOST}/streaming-types
@@ -126,6 +170,13 @@ services:
       - .env
     stdin_open: true
     tty: true
+    build:
+      context: ./types
+      dockerfile: ./Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}
+
 
   mjpeg-service:
     image: ${REGISTRY_HOST}/streaming-mjpeg-service
@@ -144,6 +195,15 @@ services:
     restart: on-failure
     stdin_open: true
     tty: true
+    build:
+      context: ./mjpeg-service
+      dockerfile: ./Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}
+        - PORT=${MJPEG_SERVICE_PORT}
+        - PORT_MIN=${MJPEG_SERVICE_PORT_MIN}
+        - PORT_MAX=${MJPEG_SERVICE_PORT_MAX}
 
   mjpeg-ui:
     image: ${REGISTRY_HOST}/streaming-mjpeg-ui
@@ -159,3 +219,10 @@ services:
       - .env
     stdin_open: true
     tty: true
+    build:
+      context: ./mjpeg-ui
+      dockerfile: ./Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}
+        - PORT=${MJPEG_UI_PORT}

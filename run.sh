@@ -85,15 +85,15 @@ dc(){
     -f dc-base.yml \
     -f dc-nsq.yml \
     -f dc-nginx.yml \
-    -f dc-streams.yml \
+    -f dc-streaming.yml \
     "$@"
 }
 dc_dev(){
   docker-compose \
     -f dc-base.yml \
     -f dc-nsq.yml \
-    -f dc-nginx.yml -f dc-nginx-build.yml \
-    -f dc-streams.yml \
+    -f dc-nginx.yml \
+    -f dc-streaming.yml \
     "$@"
 }
 

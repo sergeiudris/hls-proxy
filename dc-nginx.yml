@@ -6,6 +6,13 @@ services:
     container_name: streaming-nginx-ts
     ports:
       - ${NGINX_TS_PORT}:${NGINX_TS_PORT}
+    build:
+      context: ./nginx-ts
+      dockerfile: ./Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}
+        - PORT=${NGINX_TS_PORT}
 
   # nginx-rtmp:
   #   image: ${REGISTRY_HOST}/nginx-rtmp
