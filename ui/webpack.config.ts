@@ -9,7 +9,7 @@ const babelPluginImport = require('babel-plugin-import')
 var StatsWriterPlugin = require("webpack-stats-plugin").StatsWriterPlugin;
 
 
-console.log(' -- NODE_ENV is ', process.env.NODE_ENV)
+console.log('> NODE_ENV : ', process.env.NODE_ENV)
 const PORT = 1811
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -94,6 +94,9 @@ const config: webpack.Configuration = {
       extensions: ['html']
     }
   },
+  // watchOptions: {
+  //   poll: true
+  // },
   // watch: true,
   devtool: isDevelopment ? 'source-map' : false,
   // devtool: '#cheap-module-eval-source-map',

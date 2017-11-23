@@ -85,7 +85,7 @@ dc(){
     -f dc-base.yml \
     -f dc-nsq.yml \
     -f dc-nginx.yml \
-    -f dc-streaming.yml \
+    -f dc-streams.yml \
     "$@"
 }
 dc_dev(){
@@ -93,7 +93,7 @@ dc_dev(){
     -f dc-base.yml \
     -f dc-nsq.yml \
     -f dc-nginx.yml -f dc-nginx-build.yml \
-    -f dc-streaming.yml -f dc-streaming-build.yml \
+    -f dc-streams.yml \
     "$@"
 }
 

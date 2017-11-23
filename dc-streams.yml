@@ -1,0 +1,228 @@
+version: '3'
+services:
+
+  traefik:
+    image: traefik:1.4
+    command: --web --docker --docker.domain=docker.localhost --logLevel=DEBUG
+    ports:
+    - "8000:80"
+    - "8080:8080"
+    - "443:443"
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    - /dev/null:/traefik.toml
+
+  hub:
+    image: ${REGISTRY_HOST}/streaming-hub
+    container_name: streaming-hub
+    depends_on:
+      - types
+      - nsqlookupd
+      - nsqd
+    environment:
+      - PORT=${HUB_PORT}
+      - PORT_WSS=${HUB_PORT_WSS}
+    env_file:
+      - .env
+    ports:
+      - ${HUB_PORT}:${HUB_PORT}
+      - ${HUB_PORT_WSS}:${HUB_PORT_WSS}
+    restart: on-failure
+    stdin_open: true
+    tty: true
+    build:
+      context: ./hub
+      dockerfile: ./Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}
+        - PORT=${HUB_PORT}
+        - PORT_WSS=${HUB_PORT_WSS}
+
+  spawn-ffmpeg:
+    image: ${REGISTRY_HOST}/streaming-spawn-ffmpeg
+    container_name: streaming-spawn-ffmpeg
+    depends_on:
+      - types
+      - nsqlookupd
+      - nsqd
+    environment:
+      - PORT=${SPAWN_FFMPEG_PORT}
+    env_file:
+      - .env
+    ports:
+      - ${SPAWN_FFMPEG_PORT}:${SPAWN_FFMPEG_PORT}
+    restart: on-failure
+    stdin_open: true
+    tty: true
+    build:
+      context: ./spawn-ffmpeg
+      dockerfile: ./Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}
+        - PORT=${SPAWN_FFMPEG_PORT}
+
+  ui:
+    image: ${REGISTRY_HOST}/streaming-ui
+    container_name: streaming-ui
+    depends_on:
+      - types
+      - data
+    environment:
+      - PORT=${UI_PORT}
+    env_file:
+      - .env
+    ports:
+      - ${UI_PORT}:${UI_PORT}
+    stdin_open: true
+    tty: true
+    # labels:
+    # - traefik.port=${UI_PORT}
+    # # - "traefik.backend=ui"
+    # - traefik.frontend.rule=HostRegexp:ui.{domain:.*}
+    # # - traefik.frontend.rule=Path:/ui
+    # # - traefik.frontend.rule=Host:docker.localhost;Path:/ui/
+    build:
+      context: ./ui
+      dockerfile: ./Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}
+        - PORT=${UI_PORT}
+
+
+  cam-move:
+    image: ${REGISTRY_HOST}/streaming-cam-move
+    container_name: streaming-cam-move
+    ports:
+      - ${CAM_MOVE_PORT}:${CAM_MOVE_PORT}
+    depends_on:
+      - types
+      - nsqlookupd
+      - nsqd
+    environment:
+      - PORT=${CAM_MOVE_PORT}
+    env_file:
+      - .env
+    restart: on-failure
+    stdin_open: true
+    tty: true
+    build:
+      context: ./cam-move
+      dockerfile: ./Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}
+
+
+  cam-health:
+    image: ${REGISTRY_HOST}/streaming-cam-health
+    container_name: streaming-cam-health
+    depends_on:
+      - types
+      - nsqlookupd
+      - nsqd
+      - data
+    environment:
+      - PORT=${CAM_HEALTH_PORT}
+    env_file:
+      - .env
+    ports:
+      - ${CAM_HEALTH_PORT}:${CAM_HEALTH_PORT}
+    restart: on-failure
+    stdin_open: true
+    tty: true
+    build:
+      context: ./cam-health
+      dockerfile: ./Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}
+        - PORT=${CAM_HEALTH_PORT}
+
+  data:
+    image: ${REGISTRY_HOST}/streaming-data
+    container_name: streaming-data
+    depends_on:
+      - types
+    environment:
+      - PORT=${DATA_PORT}
+    env_file:
+      - .env
+    ports:
+      - ${DATA_PORT}:${DATA_PORT}
+    restart: on-failure
+    stdin_open: true
+    tty: true
+    build:
+      context: ./data
+      dockerfile: ./Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}
+        - PORT=${DATA_PORT}
+
+  types:
+    image: ${REGISTRY_HOST}/streaming-types
+    container_name: streaming-types
+    env_file:
+      - .env
+    stdin_open: true
+    tty: true
+    build:
+      context: ./types
+      dockerfile: ./Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}
+
+
+  mjpeg-service:
+    image: ${REGISTRY_HOST}/streaming-mjpeg-service
+    container_name: streaming-mjpeg-service
+    ports:
+      - ${MJPEG_SERVICE_PORT}:${MJPEG_SERVICE_PORT}
+      - ${MJPEG_SERVICE_PORT_MIN}-${MJPEG_SERVICE_PORT_MAX}:${MJPEG_SERVICE_PORT_MIN}-${MJPEG_SERVICE_PORT_MAX}
+    depends_on:
+      - types
+    environment:
+      - PORT=${MJPEG_SERVICE_PORT}
+      - PORT_MIN=${MJPEG_SERVICE_PORT_MIN}
+      - PORT_MAX=${MJPEG_SERVICE_PORT_MAX}
+    env_file:
+      - .env
+    restart: on-failure
+    stdin_open: true
+    tty: true
+    build:
+      context: ./mjpeg-service
+      dockerfile: ./Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}
+        - PORT=${MJPEG_SERVICE_PORT}
+        - PORT_MIN=${MJPEG_SERVICE_PORT_MIN}
+        - PORT_MAX=${MJPEG_SERVICE_PORT_MAX}
+
+  mjpeg-ui:
+    image: ${REGISTRY_HOST}/streaming-mjpeg-ui
+    container_name: streaming-mjpeg-ui
+    ports:
+      - ${MJPEG_UI_PORT}:${MJPEG_UI_PORT}
+    depends_on:
+      - types
+      - data
+    environment:
+      - PORT=${MJPEG_UI_PORT}
+    env_file:
+      - .env
+    stdin_open: true
+    tty: true
+    build:
+      context: ./mjpeg-ui
+      dockerfile: ./Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}
+        - PORT=${MJPEG_UI_PORT}
