@@ -80,8 +80,16 @@ down_sys(){
   docker-compose -f dc-sys.yml down
 }
 
-dc(){
+dc_prod(){
     REGISTRY_HOST=127.0.0.1:5001 docker-compose \
+    -f dc-base.yml \
+    -f dc-nsq.yml \
+    -f dc-nginx.yml \
+    -f dc-streaming.yml \
+    "$@"
+}
+dc(){
+  docker-compose \
     -f dc-base.yml \
     -f dc-nsq.yml \
     -f dc-nginx.yml \
@@ -93,7 +101,7 @@ dc_dev(){
     -f dc-base.yml \
     -f dc-nsq.yml \
     -f dc-nginx.yml \
-    -f dc-streaming.yml \
+    -f dc-streaming.yml -f dc-streaming-dev.yml \
     "$@"
 }
 

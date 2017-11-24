@@ -1,0 +1,59 @@
+version: '3'
+services:
+  # hub:
+  #   build:
+  #     context: ./hub
+  #     dockerfile: ./dev.Dockerfile
+  #     args:
+  #       - REGISTRY_HOST=${REGISTRY_HOST}
+  #       - NODE_IMAGE=${NODE_IMAGE}
+  #       - PORT=${HUB_PORT}
+  #       - PORT_WSS=${HUB_PORT_WSS}
+  #   volumes:
+  #     - ./hub/src:/usr/src/app/src
+  spawn-ffmpeg:
+    build:
+      context: ./spawn-ffmpeg
+      dockerfile: ./dev.Dockerfile
+      args:
+        - REGISTRY_HOST=${REGISTRY_HOST}
+        - NODE_IMAGE=${NODE_IMAGE}
+        - PORT=${SPAWN_FFMPEG_PORT}
+    volumes:
+      # - ./spawn-ffmpeg/node_modules:/usr/src/app/node_modules
+      - ./spawn-ffmpeg:/usr/src/app
+  # ui:
+  #   build:
+  #     context: ./ui
+  #     dockerfile: ./dev.Dockerfile
+  #     args:
+  #       - REGISTRY_HOST=${REGISTRY_HOST}
+  #       - NODE_IMAGE=${NODE_IMAGE}
+  #       - PORT=${UI_PORT}
+  #   volumes:
+  #     # - ./ui/node_modules:/usr/src/app/node_modules
+  #     - ./ui:/usr/src/app/
+  # cam-move:
+  #   volumes:
+  #     - ./src:/usr/src/app/src
+
+  # cam-health:
+  #   volumes:
+  #     - ./src:/usr/src/app/src
+
+  # data:
+  #   volumes:
+  #     - ./src:/usr/src/app/src
+
+  # types:
+  #   volumes:
+  #     - ./src:/usr/src/app/src
+
+  # mjpeg-ui:
+  #   volumes:
+  #     - ./src:/usr/src/app/src
+
+  # mjpeg-service:
+  #   volumes:
+  #     - ./src:/usr/src/app/src
+

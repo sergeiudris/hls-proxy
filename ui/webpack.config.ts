@@ -10,7 +10,7 @@ var StatsWriterPlugin = require("webpack-stats-plugin").StatsWriterPlugin;
 
 
 console.log('> NODE_ENV : ', process.env.NODE_ENV)
-const PORT = 1811
+const PORT = process.env.PORT || 1811
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 const DIR_ROOT = path.join(__dirname)
@@ -67,6 +67,7 @@ const config: webpack.Configuration = {
     stats: 'errors-only',
     contentBase: DEV.devServer.contentBase,
     compress: true,
+    // host: '0.0.0.0', // for webpack-dev-server in docker
     port: PORT,
     // proxy: {
     //   "/api": {
@@ -92,11 +93,11 @@ const config: webpack.Configuration = {
     staticOptions: {
       // redirect: false,
       extensions: ['html']
-    }
+    },
+    // watchOptions: {
+    //   poll: 5000
+    // }
   },
-  // watchOptions: {
-  //   poll: true
-  // },
   // watch: true,
   devtool: isDevelopment ? 'source-map' : false,
   // devtool: '#cheap-module-eval-source-map',

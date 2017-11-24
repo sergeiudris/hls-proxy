@@ -4,8 +4,7 @@ import { createHashHistory, History, Location } from 'history'
 import { Provider } from 'mobx-react'
 import DevTools from 'mobx-react-devtools'
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
-
-
+import { Contrast } from 'material-ui';
 
 
 import 'src/style/css-global'
@@ -38,7 +37,7 @@ interface IState {
 
 const theme = createMuiTheme({
   palette: {
-    type: 'light', // Switching the dark mode on is a single property value change.
+    type: 'light' as Contrast, // Switching the dark mode on is a single property value change.
   },
 });
 

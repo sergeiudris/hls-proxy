@@ -52,7 +52,7 @@ services:
       - .env
     ports:
       - ${SPAWN_FFMPEG_PORT}:${SPAWN_FFMPEG_PORT}
-    restart: on-failure
+    # restart: on-failure
     stdin_open: true
     tty: true
     build:
