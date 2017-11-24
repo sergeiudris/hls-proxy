@@ -1,17 +1,18 @@
 version: '3'
 services:
 
-  # traefik:
-  #   image: traefik:1.4
-  #   command: --web --docker --docker.domain=docker.localhost --logLevel=DEBUG
-  #   ports:
-  #   - "8000:80"
-  #   - "8080:8080"
-  #   - "443:443"
-  #   volumes:
-  #   - /var/run/docker.sock:/var/run/docker.sock
-  #   - /dev/null:/traefik.toml
-
+  traefik:
+    image: ${REGISTRY_HOST}/traefik
+    command: --web --docker --docker.domain=docker.localhost
+    ports:
+      - "8000:80"
+      - "8080:8080"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /dev/null:/traefik.toml
+    # labels:
+    #   - traefik.enable=false
   hub:
     image: ${REGISTRY_HOST}/streaming-hub
     container_name: streaming-hub
@@ -30,6 +31,16 @@ services:
     restart: on-failure
     stdin_open: true
     tty: true
+    labels:
+      - traefik.port=${HUB_PORT}
+      # - traefik.backend=hub
+      # - traefik.frontend.rule=PathPrefix:/
+      # - traefik.backend=hub
+      # - "traefik.frontend.rule=PathPrefix: /hub"
+      # - traefik.enable=true
+      # - traefik.frontend.rule=Path:/ui
+      # - traefik.frontend.rule=Host:hub.localhost
+      # - "traefik.frontend.rule=Host: dev.local; PathPrefix: /hub"
     build:
       context: ./hub
       dockerfile: ./Dockerfile
@@ -77,12 +88,7 @@ services:
       - ${UI_PORT}:${UI_PORT}
     stdin_open: true
     tty: true
-    # labels:
-    # - traefik.port=${UI_PORT}
-    # # - "traefik.backend=ui"
-    # - traefik.frontend.rule=HostRegexp:ui.{domain:.*}
-    # # - traefik.frontend.rule=Path:/ui
-    # # - traefik.frontend.rule=Host:docker.localhost;Path:/ui/
+
     build:
       context: ./ui
       dockerfile: ./Dockerfile

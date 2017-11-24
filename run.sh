@@ -81,7 +81,7 @@ down_sys(){
 }
 
 dc_prod(){
-    REGISTRY_HOST=127.0.0.1:5001 docker-compose \
+   HOSTNAME=host REGISTRY_HOST=127.0.0.1:5001 docker-compose \
     -f dc-base.yml \
     -f dc-nsq.yml \
     -f dc-nginx.yml \
