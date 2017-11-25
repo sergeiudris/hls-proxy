@@ -6,6 +6,7 @@
 # ps aux --sort -rss
 # for pid in $(ps -ef | grep "ffmpeg" | awk '{print $2}'); do kill -9 $pid; done
 # lsof -t -i:1806
+# lsof -i :8000
 # kill -9 1234
 
 #docker rm $(docker ps -a -q)

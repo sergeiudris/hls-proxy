@@ -6,8 +6,8 @@ services:
     container_name: streaming-nsqlookupd
     command: /nsqlookupd
     ports:
-      - 4160
-      - ${NSQLOOKUPD_PORT}
+      - 4160:4160
+      - ${NSQLOOKUPD_PORT}:${NSQLOOKUPD_PORT}
   nsqd:
     image: ${REGISTRY_HOST}/nsq
     container_name: streaming-nsqd
@@ -15,8 +15,8 @@ services:
     depends_on:
       - nsqlookupd
     ports:
-      - ${NSQD_PORT}
-      - 4151
+      - ${NSQD_PORT}:${NSQD_PORT}
+      - 4151:4151
   nsqadmin:
     image: ${REGISTRY_HOST}/nsq
     container_name: streaming-nsqadmin
