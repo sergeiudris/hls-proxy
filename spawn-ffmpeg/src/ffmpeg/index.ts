@@ -19,7 +19,7 @@ import { FFMpegStream } from './ffmpeg-stream'
 
 import { app } from '../express'
 
-const STREAMS = new Map<string, FFMpegStream>()
+const STREAMS: FFMpegStream[] = []
 
 process.on('exit', () => {
   STREAMS.forEach((stream) => {
@@ -28,20 +28,20 @@ process.on('exit', () => {
 })
 
 app.get('/status', (req, res, next) => {
-  res.json(Array.from(STREAMS.keys()));
+  res.json(STREAMS.map(s => s.options.id));
 })
 
 app.get('/stop-all', (req, res, next) => {
   STREAMS.forEach((stream) => {
     stopStream(stream.state.id)
   })
-  res.json(Array.from(STREAMS.keys()));
+  res.json(STREAMS.map(s => s.options.id));
 })
 
 reader
   .on('message', msg => {
     const pkg: Pkg<Pkg.FFmpeg> = JSON.parse(msg.body.toString())
-    console.log(`pkg: ${pkg.channel} ${pkg.type} ${pkg.dataType}`)
+    // console.log(`pkg: ${pkg.channel} ${pkg.type} ${pkg.dataType}`)
     if (pkg.dataType != Pkg.DataType.FFMPEG) {
       msg.finish()
       return
@@ -61,15 +61,18 @@ reader
 
 
 export function onevent(pkg: Pkg<Pkg.FFmpeg>) {
-
+  console.log(`pkg: ${pkg.channel} ${pkg.type} ${pkg.dataType}`)
   if (pkg.data.type == FFmpeg.Type.START) {
     const state = pkg.data.state
     const id = state.id
-    const stream = STREAMS.get(id)
-
+    const stream = STREAMS.find(s => s.options.id == id)
     if (stream) {
       publishStatus(stream.state)
       return
+    }
+    if(STREAMS.length > 3){
+      const oldestStream = STREAMS[0]
+      stopStream(oldestStream.options.id)
     }
     startStream(pkg.data.state.url_src)
   }
@@ -120,18 +123,20 @@ function startStream(url: string) {
       stopStream(stream.options.id)
     })
 
-  STREAMS.set(stream.options.id, stream)
+  STREAMS.push(stream)
 
   stream.cmd.run()
 
 }
 
 function stopStream(id: string) {
-  const stream = STREAMS.get(id)
+  const stream = STREAMS.find(s => s.options.id == id)
   if (stream) {
     stream.cmd.kill('SIGKILL')
+    const i = STREAMS.findIndex(s => s.options.id == id)
+    STREAMS.splice(i,1)
   }
-  STREAMS.delete(id)
+
 }
 
 function urlPublishTs(url: string) {
