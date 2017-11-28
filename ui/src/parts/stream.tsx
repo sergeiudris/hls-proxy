@@ -107,6 +107,9 @@ export const StreamStream =
           render() {
 
             const { streamInfo, streamState, store, classes } = this.props
+            if(!streamInfo){
+              return null
+            }
             const { url_hls, url_src } = streamState.ffmpeg
             return (
               <Grid item xs={3} >
