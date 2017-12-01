@@ -14,12 +14,12 @@ const INTERVAL = 2000
 
 
 getCams().then(() => {
-  cams.forEach((cam, i) => {
-    const url = cam.version.object.cam_url
-    const camera = createCamera(url)
-    CAMERAS.set(camera.state.id, camera)
+  // cams.forEach((cam, i) => {
+  //   const url = cam.version.object.cam_url
+  //   const camera = createCamera(url)
+  //   CAMERAS.set(camera.state.id, camera)
 
-  })
+  // })
 
   intervalID = setInterval(() => {
     CAMERAS.forEach((c) => {
