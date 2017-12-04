@@ -28,7 +28,7 @@ process.on('exit', () => {
 })
 
 app.get('/status', (req, res, next) => {
-  res.json(STREAMS.map(s => s.options.id));
+  res.json(STREAMS.map(s => s.state));
 })
 
 app.get('/stop-all', (req, res, next) => {
