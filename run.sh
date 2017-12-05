@@ -9,98 +9,30 @@
 # lsof -i :8000
 # kill -9 1234
 
-#docker rm $(docker ps -a -q)
-#docker rmi -f $(docker images -q)
-
-
-HOSTNAME=host
 USERNAME=user
 HOST_SSH=$USERNAME@$HOSTNAME
 DIR_STREAMING=/opt/streaming
+
+HOSTNAME_LOCAL=127.0.0.1:5001
 REGISTRY_HOST_LOCAL=127.0.0.1:5001
+
+HOSTNAME_REMOTE=host
 REGISTRY_HOST_REMOTE=host:5001
 
 
-test() {
-  echo "TEST $1";
+pull_tag_local(){
+  docker pull traefik && docker tag traefik ${REGISTRY_HOST_LOCAL}/traefik && \
+  docker pull nsqio/nsq && docker tag nsqio/nsq ${REGISTRY_HOST_LOCAL}/nsq
 }
 
-devup() {
-  docker-compose -f dev.yml up "$@"
-}
-
-devdown() {
-  docker-compose -f dev.yml down --remove-orphans "$@"
-}
-
-
-
-build(){
-  lerna=./node_modules/.bin/lerna
-  $lerna bootstrap && \
-  $lerna run compile && \
-  $lerna bootstrap && \
-  $lerna run build
-}
-
-deploy(){
-  sh run.sh dc pull && \
-  sh run.sh dc up -d
-}
-
-deploy_remote(){
-  dc_dev build && \
-  dc_dev push && \
-  ssh -t $HOST_SSH "
-    cd /opt/streaming;
-    sudo sh run.sh dc pull;
-    sudo sh run.sh dc up -d;
-  "
-}
-
-deploy_legacy(){
-  dirUser=""
-  dirRoot=""
-  for service in "$@"
-  do
-      dirUser=/home/user/$service
-      dirRoot=/opt/streaming/$service/dist
-      # ssh -t $HOST_SSH sudo supervisorctl stop $group:*
-      scp -r ./$service/dist $HOST_SSH:$dirUser
-      ssh -t $HOST_SSH "
-        sudo rm -rf $dirRoot ;
-        echo removed $dirRoot;
-        sudo mkdir -p  $dirRoot ;
-        sudo mv $dirUser/* $dirRoot ;
-        sudo rm -rf $dirUser ;
-       "
-  done
-}
-
-up_sys(){
-  docker-compose -f dc-sys.yml up -d
-}
-down_sys(){
-  docker-compose -f dc-sys.yml down
-}
-
-dc_prod(){
-   HOSTNAME=${HOSTNAME} REGISTRY_HOST=${REGISTRY_HOST_LOCAL} docker-compose \
-    -f dc-base.yml \
-    -f dc-nsq.yml \
-    -f dc-nginx.yml \
-    -f dc-streaming.yml \
-    "$@"
-}
-
-pull(){
+pull_tag_remote(){
   docker pull traefik && docker tag traefik ${REGISTRY_HOST_REMOTE}/traefik && \
   docker pull nsqio/nsq && docker tag nsqio/nsq ${REGISTRY_HOST_REMOTE}/nsq
 }
 
-dc(){
-
-  docker-compose \
+# use this for local development
+dc_local(){
+  HOSTNAME=${HOSTNAME_LOCAL} REGISTRY_HOST=${REGISTRY_HOST_LOCAL} docker-compose \
     -f dc-base.yml \
     -f dc-nsq.yml \
     -f dc-nginx.yml \
@@ -108,30 +40,34 @@ dc(){
     "$@"
 }
 
-dc_dev(){
-  docker-compose \
+# use this alias on production server
+dc_prod(){
+  HOSTNAME=${HOSTNAME_REMOTE} REGISTRY_HOST=${REGISTRY_HOST_LOCAL} docker-compose \
     -f dc-base.yml \
     -f dc-nsq.yml \
     -f dc-nginx.yml \
-    -f dc-streaming.yml -f dc-streaming-dev.yml \
+    -f dc-streaming.yml \
     "$@"
 }
 
-up(){
-  docker-compose -f dc-base.yml build && \
-  docker-compose \
+# use this for building images locally (to push to prod registry)
+dc_remote(){
+  HOSTNAME=${HOSTNAME_REMOTE} REGISTRY_HOST=${REGISTRY_HOST_REMOTE} docker-compose \
+    -f dc-base.yml \
     -f dc-nsq.yml \
-    -f dc-nginx.yml -f dc-nginx-build.yml \
-    -f dc-streaming.yml -f dc-streaming-build.yml \
-    up --build -d
+    -f dc-nginx.yml \
+    -f dc-streaming.yml \
+    "$@"
 }
 
-down(){
-  docker-compose \
-    -f dc-nsq.yml \
-    -f dc-nginx.yml -f dc-nginx-build.yml \
-    -f dc-streaming.yml -f dc-streaming-build.yml \
-   down
+# remove all images (do not do this)
+rmi(){
+  docker rmi -f $(docker images -q)
+}
+
+# remove all containers (do not do this)
+rm(){
+  docker rm $(docker ps -a -q)
 }
 
 registry_start(){
@@ -173,7 +109,17 @@ stop_nginx(){
   $DIR_STREAMING/nginx/rtmp/sbin/nginx -s stop &
 }
 
+hls_remote(){
+  ssh -t $HOST_SSH "
+     sudo ffmpeg  -y -rtsp_transport tcp -i  rtsp://host:554/57 -c:v libx264 -s 1280x720 -b:v 600k -threads 1 -f mpegts http://127.0.0.1:1840/publish/asd
+  "
+}
 
+hls(){
+  # ffmpeg  -y -rtsp_transport tcp -i rtsp://host:554/57 -c:v libx264 -s 1280x720 -b:v 600k -threads 1 -f mpegts http://host:1840/publish/asd
+  ffmpeg  -y -rtsp_transport tcp -i rtsp://host:554/57 -c:v libx264 -s 1280x720 -f mpegts http://host:1840/publish/asd
+
+}
 # start_nginx(){
 #   ssh -t $HOST_SSH "
 #     sudo $DIR_STREAMING/nginx/ts/sbin/nginx &
@@ -192,47 +138,96 @@ stop_nginx(){
 #   "
 # }
 
-stop_rtmp(){
-   ssh -t $HOST_SSH "
-    sudo $DIR_STREAMING/nginx/rtmp/sbin/nginx -s stop ;
-    echo second finished
-  "
-}
 
-copy2(){
-   scp -r ./hub/dist $HOST_SSH:/home/user/hub
-}
+# test() {
+#   echo "TEST $1";
+# }
 
+# devup() {
+#   docker-compose -f dev.yml up "$@"
+# }
 
-size(){
-  git rev-list --objects --all \
-| git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' \
-| awk '/^blob/ {print substr($0,6)}' \
-| sort --numeric-sort --key=2 \
-| cut --complement --characters=13-40 \
-| numfmt --field=2 --to=iec-i --suffix=B --padding=7 --round=nearest
-}
+# devdown() {
+#   docker-compose -f dev.yml down --remove-orphans "$@"
+# }
 
 
-hls_remote(){
-  ssh -t $HOST_SSH "
-     sudo ffmpeg  -y -rtsp_transport tcp -i  rtsp://host:554/57 -c:v libx264 -s 1280x720 -b:v 600k -threads 1 -f mpegts http://127.0.0.1:1840/publish/asd
-  "
-}
+
+# build(){
+#   lerna=./node_modules/.bin/lerna
+#   $lerna bootstrap && \
+#   $lerna run compile && \
+#   $lerna bootstrap && \
+#   $lerna run build
+# }
+
+# deploy(){
+#   sh run.sh dc pull && \
+#   sh run.sh dc up -d
+# }
+
+# deploy_remote(){
+#   dc_dev build && \
+#   dc_dev push && \
+#   ssh -t $HOST_SSH "
+#     cd /opt/streaming;
+#     sudo sh run.sh dc pull;
+#     sudo sh run.sh dc up -d;
+#   "
+# }
+
+# deploy_legacy(){
+#   dirUser=""
+#   dirRoot=""
+#   for service in "$@"
+#   do
+#       dirUser=/home/user/$service
+#       dirRoot=/opt/streaming/$service/dist
+#       # ssh -t $HOST_SSH sudo supervisorctl stop $group:*
+#       scp -r ./$service/dist $HOST_SSH:$dirUser
+#       ssh -t $HOST_SSH "
+#         sudo rm -rf $dirRoot ;
+#         echo removed $dirRoot;
+#         sudo mkdir -p  $dirRoot ;
+#         sudo mv $dirUser/* $dirRoot ;
+#         sudo rm -rf $dirUser ;
+#        "
+#   done
+# }
 
 
-hls(){
-  # ffmpeg  -y -rtsp_transport tcp -i rtsp://host:554/57 -c:v libx264 -s 1280x720 -b:v 600k -threads 1 -f mpegts http://host:1840/publish/asd
-  ffmpeg  -y -rtsp_transport tcp -i rtsp://host:554/57 -c:v libx264 -s 1280x720 -f mpegts http://host:1840/publish/asd
+# stop_rtmp(){
+#    ssh -t $HOST_SSH "
+#     sudo $DIR_STREAMING/nginx/rtmp/sbin/nginx -s stop ;
+#     echo second finished
+#   "
+# }
 
-}
+# copy2(){
+#    scp -r ./hub/dist $HOST_SSH:/home/user/hub
+# }
 
 
-kill(){
-   ssh -t $HOST_SSH "
-     sudo for pid in $(ps -ef | grep "$1" | awk '{print $2}'); do kill -9 $pid; done
-  "
-}
+
+
+
+
+# size(){
+#   git rev-list --objects --all \
+# | git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' \
+# | awk '/^blob/ {print substr($0,6)}' \
+# | sort --numeric-sort --key=2 \
+# | cut --complement --characters=13-40 \
+# | numfmt --field=2 --to=iec-i --suffix=B --padding=7 --round=nearest
+# }
+
+
+
+# kill(){
+#    ssh -t $HOST_SSH "
+#      sudo for pid in $(ps -ef | grep "$1" | awk '{print $2}'); do kill -9 $pid; done
+#   "
+# }
 # sudo ffmpeg  -y -rtsp_transport tcp -i  rtsp://host:554/57 -c:v libx264 -s 1280x720 -b:v 1200k -f m$pegts http://127.0.0.1:1840/publish/asd ;
 #  sudo ffmpeg  -y -rtsp_transport tcp -i  rtsp://host:554/57 -c:v libx264 -s 1280x720 -b:v 90k -f mpegts http://127.0.0.1:1840/publish/asd ;
 # sudo ffmpeg  -y -rtsp_transport tcp -i  rtsp://host:554/57 -c:v libx264 -s 1280x720 -f mpegts http://127.0.0.1:1840/publish/asd ;  ??
