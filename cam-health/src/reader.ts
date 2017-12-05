@@ -1,7 +1,8 @@
 import * as nsq from 'nsqjs'
-import { NSQLOOKUPD_HOST, CHANNEL } from '../config'
-import { logger } from '../logger'
-import {Pkg} from '@streaming/types'
+import { NSQLOOKUPD_HOST, CHANNEL } from './config'
+import { logger } from './logger'
+import { Pkg } from '@streaming/types'
+import { Reader } from 'nsqjs';
 
 export const reader = new nsq.Reader(Pkg.Topic.STREAMING, CHANNEL, {
   lookupdHTTPAddresses: NSQLOOKUPD_HOST,
@@ -10,9 +11,20 @@ export const reader = new nsq.Reader(Pkg.Topic.STREAMING, CHANNEL, {
   lookupdPollInterval: 10,
 })
 
-reader.on('nsqd_connected', () => {
+reader.on(Reader.NSQD_CONNECTED as any, () => {
   logger.info(`reader ${CHANNEL} connected  ${NSQLOOKUPD_HOST}`)
 })
+
+reader.on(Reader.NSQD_CLOSED as any, () => {
+  logger.info(`reader ${CHANNEL} closed  ${NSQLOOKUPD_HOST}`)
+})
+
+reader.on(Reader.ERROR as any, (err) => {
+  logger.error(`nsqd reader error ${CHANNEL}, ${NSQLOOKUPD_HOST}`)
+  logger.error(err.message)
+
+})
+
 
 reader.connect()
 

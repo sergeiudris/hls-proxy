@@ -6,12 +6,15 @@ import * as morgan from 'morgan'
 import * as cookieParser from 'cookie-parser'
 import * as bodyParser from 'body-parser'
 import * as serveIndex from 'serve-index'
+import { CAMERAS } from './state'
+import { logger } from './logger';
+import { PORT } from './config';
 
-import { logger } from '../logger';
-import routeApi from './api'
-import { PORT } from '../config'
+
+const NODE_ENV = process.env.NODE_ENV;
 
 export const app = express();
+
 
 app.use(cors());
 app.use(morgan('combined', {
@@ -21,6 +24,7 @@ app.use(morgan('combined', {
     }
   }
 }));
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -32,7 +36,6 @@ app.use(express.static('dist/scripts'))
 app.use('/logs', serveIndex('logs', { icons: true }))
 app.use('/logs', express.static('logs'))
 
-app.use('/api', routeApi);
 
 app.get('/', (req: express.Request, res: express.Response, next: Function) => {
   res.send('OK')
@@ -51,6 +54,7 @@ app.get('/', (req: express.Request, res: express.Response, next: Function) => {
 //   logger.debug('catching 404 error');
 //   res.send("404 :( ")
 // });
+
 
 app.listen(PORT, () => {
   logger.info('Express server listening on port ' + PORT);

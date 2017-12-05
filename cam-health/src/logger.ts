@@ -1,7 +1,6 @@
 import * as winston from 'winston'
 import 'winston-daily-rotate-file'
 import * as fs from 'fs-extra'
-import {urlToIdString} from './url-to-id'
 
 const DIRNAME = 'logs/server/root'
 const FILENAME = 'root.log'
@@ -66,11 +65,10 @@ export function createLogger(options: Options) {
 
 
 
-export function createStreamLogger(url: string) {
+export function createStreamLogger(urlId: string) {
 
-  url = urlToIdString(url)
-  const DIRNAME = `logs/server/stream/id/${url}`
-  const FILENAME = `${url}.log`
+  const DIRNAME = `logs/server/stream/id/${urlId}`
+  const FILENAME = `${urlId}.log`
   fs.ensureDirSync(DIRNAME);
 
   return createLogger({

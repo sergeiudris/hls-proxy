@@ -1,6 +1,6 @@
 import { logger } from './logger'
 
-import './http';
+import './express-app';
 
 Object.assign(process.env, {
   NODE_ENV: process.argv['includes']('--release') ? 'production' : 'development',

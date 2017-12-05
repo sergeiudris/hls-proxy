@@ -5,14 +5,17 @@
 
 *services are described in .yml files
 
-*be sure docker-compose 1.17 or higher is installed (you probably need `Docker Edge` build)
+*be sure docker-compose 1.17 or higher is installed? you probably need `Docker Edge` build
+
 
 ### run locally ###
 ```shell
 # do once
 $ sh run.sh pull_tag_local
 # build and start everything
-$ sh run.sh dc_local up -d
+$ sh run.sh dc_local up -d --build
+# stop everything and remove containers
+$ sh run.sh dc_local down
 ```
 
 ### build for prod ###
@@ -21,7 +24,7 @@ $ sh run.sh dc_local up -d
 $ sh run.sh pull_tag_remote
 # build and start everything
 $ sh run.sh dc_remote build
-#push to remote registry
+# push to remote registry
 $ sh run.sh dc_remote push
 ```
 
@@ -34,3 +37,5 @@ $ sh run.sh dc_prod pull
 $ sh run.sh dc_prod up -d
 
 ```
+
+*`dc_local` , `dc_remote`, `dc_prod` are aliases for `docker-compose`. check `docker-compose` docs for commands like `'up -d'` `'build'` etc

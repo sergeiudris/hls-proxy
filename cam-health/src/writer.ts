@@ -1,12 +1,12 @@
-import * as nsq from 'nsqjs'
-import { logger } from '../logger'
+import { Writer } from 'nsqjs'
+import { logger } from './logger'
 import { Evt, FFmpeg, Pkg } from '@streaming/types'
 
-import { NSQLOOKUPD_HOST, NSQD_PORT, NSQD_HOSTNAME, CHANNEL } from '../config'
+import { NSQLOOKUPD_HOST, NSQD_PORT, NSQD_HOSTNAME, CHANNEL } from './config'
 
-export const writer = new nsq.Writer(NSQD_HOSTNAME, NSQD_PORT)
-  .on('ready', () => {
-    logger.info(`writer ${CHANNEL} connected  ${NSQD_PORT}`)
+export const writer = new Writer(NSQD_HOSTNAME, NSQD_PORT)
+  .on(Writer.READY as any, () => {
+    logger.info(`writer ${CHANNEL} ready  ${NSQD_PORT}`)
     // w.publish('sample_topic', 'it really tied the room together')
     // w.publish('sample_topic', 'This message gonna arrive 1 sec later.', 1000 as any)
     // w.publish('sample_topic', [
@@ -19,8 +19,8 @@ export const writer = new nsq.Writer(NSQD_HOSTNAME, NSQD_PORT)
     //   w.close()
     // })
   })
-  .on('closed', () => {
-    logger.info('Writer closed')
+  .on(Writer.CLOSED as any, () => {
+    logger.info(`writer ${CHANNEL} closed ${NSQD_PORT}`)
   })
 
 writer.connect()
@@ -40,7 +40,7 @@ export function publishStream(data: Pkg.Stream, type: Pkg.Type = Pkg.Type.ECHO) 
 export function publishFFmpeg(data: Pkg.FFmpeg, type: Pkg.Type = Pkg.Type.CMD) {
   const pkg: Pkg<Pkg.FFmpeg> = {
     topic: Pkg.Topic.STREAMING,
-    channel: 'camera-health',
+    channel: CHANNEL,
     timestamp: Date.now(),
     type: type,
     dataType: Pkg.DataType.FFMPEG,

@@ -7,11 +7,11 @@ import * as cookieParser from 'cookie-parser'
 import * as bodyParser from 'body-parser'
 import * as serveIndex from 'serve-index'
 
+import routeFiles from './files'
 import routeApi from './api'
 
-import { logger } from '../logger';
-import { PORT } from '../config';
-
+import { PORT } from './config'
+import { logger } from './logger';
 
 
 const NODE_ENV = process.env.NODE_ENV;
@@ -35,10 +35,12 @@ app.use(cookieParser());
 
 app.use(express.static('data/public', { index: false, extensions: ['html'] }))
 app.use(express.static('dist/client', { extensions: ['html'] }))
+app.use(express.static('./static', { extensions: ['html'] }))
 app.use(express.static('dist/scripts'))
 app.use('/logs', serveIndex('logs', { icons: true }))
 app.use('/logs', express.static('logs'))
 
+app.use('/files', routeFiles);
 app.use('/api', routeApi);
 
 app.get('/', (req: express.Request, res: express.Response, next: Function) => {
@@ -46,18 +48,18 @@ app.get('/', (req: express.Request, res: express.Response, next: Function) => {
 })
 
 // catch 404 and forward to error handler
-// app.use((req: express.Request, res: express.Response, next: Function) => {
+app.use((req: express.Request, res: express.Response, next: Function) => {
 
-//   // let err = new Error('Not Found');
-//   // res.status(404);
-//   // logger.debug('catching 404 error');
-//   // return next(err);
+  // let err = new Error('Not Found');
+  // res.status(404);
+  // logger.debug('catching 404 error');
+  // return next(err);
 
-//   // let err = new Error('Not Found');
-//   // res.status(404);
-//   logger.debug('catching 404 error');
-//   res.send("404 :( ")
-// });
+  // let err = new Error('Not Found');
+  // res.status(404);
+  logger.debug('catching 404 error');
+  res.send("404 :( ")
+});
 
 
 app.listen(PORT, () => {
@@ -65,5 +67,3 @@ app.listen(PORT, () => {
 }).on('error', err => {
   logger.error('Cannot start server, port most likely in use', err);
 });
-
-

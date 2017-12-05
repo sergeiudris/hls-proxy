@@ -6,8 +6,8 @@ import * as http from 'http'
 const route = Router()
 
 route.get('/api/:key', function (req: Request, res: Response, next: NextFunction) {
-  const key = req.params.key;
 
+  const key = req.params.key;
   res.json({ key: key });
 
 })
@@ -15,7 +15,6 @@ route.get('/api/:key', function (req: Request, res: Response, next: NextFunction
 route.get('/random', function (req: Request, res: Response, next: NextFunction) {
 
   const random = Math.random().toString()
-
   res.json({random});
 
 })

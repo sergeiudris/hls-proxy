@@ -1,8 +1,8 @@
 import * as nsq from 'nsqjs'
-import { logger } from '../logger'
+import { logger } from './logger'
 import { Evt, FFmpeg, Pkg } from '@streaming/types'
 
-import { NSQD_HOSTNAME, NSQD_PORT, CHANNEL } from '../config'
+import { NSQD_HOSTNAME, NSQD_PORT, CHANNEL } from './config'
 
 export const writer = new nsq.Writer(NSQD_HOSTNAME, NSQD_PORT)
   .on('ready', () => {

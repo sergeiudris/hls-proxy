@@ -2,86 +2,48 @@ import { logger } from './logger'
 import * as request from 'request'
 import { Cams, FFmpeg, Pkg, ReadyState, Stream } from '@streaming/types'
 import fetch from 'node-fetch'
-import { publishFFmpeg, publishStream, reader } from './nsq'
+import { publishFFmpeg, publishStream } from './writer'
+import { reader } from './reader'
 import { Camera } from './camera'
 import { HOSTNAME, NGINX_TS_HOSTNAME, NGINX_TS_PORT, DATA_HOSTNAME, DATA_PORT } from './config'
-import { app } from './express'
+import { CAMERAS } from './state'
+import './express-app'
 
-let cams: Cams.CameraInfo[] = []
-const CAMERAS = new Map<string, Camera>()
-let intervalID: any
 const INTERVAL = 2000
 
-
-getCams().then(() => {
-  // cams.forEach((cam, i) => {
-  //   const url = cam.version.object.cam_url
-  //   const camera = createCamera(url)
-  //   CAMERAS.set(camera.state.id, camera)
-
-  // })
-
-  intervalID = setInterval(() => {
-    CAMERAS.forEach((c) => {
-      const cam = c
-      if (cam.state.ffmpeg.readyState != ReadyState.OPEN) {
-        return
-      }
-      // if(cam.state.nginx.readyState == ReadyState.OPEN && cam.state.ffmpeg.readyState == ReadyState.OPEN){
-      //   return
-      // }
-      fetch(urlWatchTsInnnerNetwork(cam.state.ffmpeg.url_src)).then(r => {
-        // logger.info(r.status.toString()) // 200, 400
-        // logger.info(r.statusText) // OK  Not Found
-        r.text().then((i3u8)=>{
-          const date = new Date()
-          const isClosing = i3u8.includes('EXT-X-ENDLIST')
-          const readyState = r.status != 200 ? ReadyState.CLOSED : (isClosing ? ReadyState.CLOSING: ReadyState.OPEN)
-          const ps: Partial<Stream.State> = {
-            nginx: {
-              ...cam.state.nginx,
-              readyState: readyState,
-              last_healthcheck: date.getTime(),
-              last_healthcheck_str: date.toString(),
-              last_status: r.status,
-              msg: 'readyState set by cam-health helthcheck routine'
-            }
+setInterval(() => {
+  CAMERAS.forEach((c) => {
+    const cam = c
+    if (cam.state.ffmpeg.readyState != ReadyState.OPEN) {
+      return
+    }
+    // if(cam.state.nginx.readyState == ReadyState.OPEN && cam.state.ffmpeg.readyState == ReadyState.OPEN){
+    //   return
+    // }
+    fetch(urlWatchTsInnnerNetwork(cam.state.ffmpeg.url_src)).then(r => {
+      // logger.info(r.status.toString()) // 200, 400
+      // logger.info(r.statusText) // OK  Not Found
+      r.text().then((i3u8) => {
+        const date = new Date()
+        const isClosing = i3u8.includes('EXT-X-ENDLIST')
+        const readyState = r.status != 200 ? ReadyState.CLOSED : (isClosing ? ReadyState.CLOSING : ReadyState.OPEN)
+        const ps: Partial<Stream.State> = {
+          nginx: {
+            ...cam.state.nginx,
+            readyState: readyState,
+            last_healthcheck: date.getTime(),
+            last_healthcheck_str: date.toString(),
+            last_status: r.status,
+            msg: 'readyState set by cam-health helthcheck routine'
           }
-          cam.setState(ps)
-        })
-
+        }
+        cam.setState(ps)
       })
-      // cams.forEach((info, i) => {
-      //   const cam = getCamera(info.version.object.cam_url, info.version.object.cam_url)
-      //   setTimeout(() => {
-      //     fetch(urlWatchTs(cam.state.ffmpeg.url_hls)).then(r => {
-      //       // logger.info(r.status.toString()) // 200, 400
-      //       // logger.info(r.statusText) // OK  Not Found
-      //       const date = new Date()
-      //       let readyState = r.status == 200 ? ReadyState.OPEN : ReadyState.CLOSED
-      //       cam.setState({
-      //         nginx: {
-      //           readyState: readyState,
-      //           ...cam.state.nginx,
-      //           last_healthcheck: date.getTime(),
-      //           last_healthcheck_str: date.toString(),
-      //           last_status: r.status
-      //         }
-      //       })
-      //     })
-
-      //   }, i * (INTERVAL / cams.length))
 
     })
-  }, INTERVAL)
+  })
+}, INTERVAL)
 
-})
-
-app.get('/status', (req, res) => {
-
-  res.json(Array.from(CAMERAS).map(c => c[1].state))
-
-})
 
 reader
   .on('message', msg => {
@@ -217,29 +179,6 @@ function getCamera(id: string, url: string) {
   }
   return cam
 }
-function getCams() {
-
-  return Promise.all<Cams.Dataset, Cams.Dataset>([
-    fetch(`http://${DATA_HOSTNAME}:${DATA_PORT}/dataset-2/httpcameras.json`).then(r => r.json()),
-    fetch(`http://${DATA_HOSTNAME}:${DATA_PORT}/dataset-2/rtspcameras.json`).then(r => r.json())
-  ])
-    .then(([kre, int]) => {
-      cams = kre.items.concat(int.items)
-        .filter(c => c.version.object.cam_url)
-      return cams
-    })
-
-
-}
-
-// setInterval(() => {
-//   CAMERAS.forEach((cam) => {
-//     console.warn('reader', reader.listenerCount('message'))
-//     if(cam.listenerCount(Camera.STATE_CHANGED) > 1){
-//       console.warn(cam.state.id, cam.listenerCount(Camera.STATE_CHANGED))
-//     }
-//   })
-// }, 10000)
 
 function urlPublishTs(url: string) {
   return `http://${NGINX_TS_HOSTNAME}:${NGINX_TS_PORT}/publish/${urlToIdString(url)}`
@@ -255,7 +194,6 @@ export function urlToIdString(url: string) {
   return url.replace(/(\/|\\|:|\.)/g, '_')
 }
 
-
 // request
 //   .get('http://host:1825/dataset/httpcameras.json', {
 //   }, (err, res, body) => {
@@ -264,6 +202,18 @@ export function urlToIdString(url: string) {
 //   .on('error', (err) => {
 //     console.log(err.message)
 //   })
+// function getCams() {
+
+//     return Promise.all<Cams.Dataset, Cams.Dataset>([
+//       fetch(`http://${DATA_HOSTNAME}:${DATA_PORT}/dataset-2/httpcameras.json`).then(r => r.json()),
+//       fetch(`http://${DATA_HOSTNAME}:${DATA_PORT}/dataset-2/rtspcameras.json`).then(r => r.json())
+//     ])
+//       .then(([kre, int]) => {
+//         cams = kre.items.concat(int.items)
+//           .filter(c => c.version.object.cam_url)
+//         return cams
+//       })
+//   }
 
 
 

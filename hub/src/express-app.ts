@@ -7,16 +7,10 @@ import * as cookieParser from 'cookie-parser'
 import * as bodyParser from 'body-parser'
 import * as serveIndex from 'serve-index'
 
-import routeApi from './api'
-
-import { logger } from '../logger';
-import { PORT } from '../config';
-
-
-const NODE_ENV = process.env.NODE_ENV;
+import { logger } from './logger';
+import { PORT } from './config'
 
 export const app = express();
-
 
 app.use(cors());
 app.use(morgan('combined', {
@@ -26,7 +20,6 @@ app.use(morgan('combined', {
     }
   }
 }));
-
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -38,13 +31,23 @@ app.use(express.static('dist/scripts'))
 app.use('/logs', serveIndex('logs', { icons: true }))
 app.use('/logs', express.static('logs'))
 
-app.use('/api', routeApi);
-
 app.get('/', (req: express.Request, res: express.Response, next: Function) => {
   res.send('OK')
 })
-app.get('/health', (req, res, next) => {
-  res.json('OK')
+
+app.get('/api/:key', function (req: Request, res: Response, next: NextFunction) {
+  const key = req.params.key;
+
+  res.json({ key: key });
+
+})
+
+app.get('/random', function (req: Request, res: Response, next: NextFunction) {
+
+  const random = Math.random().toString()
+
+  res.json({ random });
+
 })
 
 // catch 404 and forward to error handler
@@ -61,12 +64,10 @@ app.get('/health', (req, res, next) => {
 //   res.send("404 :( ")
 // });
 
-
 app.listen(PORT, () => {
   logger.info('Express server listening on port ' + PORT);
 }).on('error', err => {
   logger.error('Cannot start server, port most likely in use', err);
 });
-
 
 

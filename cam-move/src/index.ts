@@ -1,19 +1,21 @@
 import { logger } from './logger'
-
-import './http';
-import './nsq'
-
-Object.assign(process.env, {
-  NODE_ENV: process.argv['includes']('--release') ? 'production' : 'development',
-})
-
-
-process.on('uncaughtException', (err) => {
-  logger.error('uncaughtException', '\n', err.stack)
-})
+import * as request from 'request'
+import { Cams, FFmpeg, Pkg, ReadyState, Stream } from '@streaming/types'
+import { reader } from './reader'
+import { HOSTNAME, NGINX_TS_HOSTNAME, NGINX_TS_PORT, DATA_HOSTNAME, DATA_PORT } from './config'
+import { CAMERAS } from './state'
+import './express-app'
+import './writer'
+const INTERVAL = 2000
 
 
-// import './kafka'
-// import './kafka-no'
-// import './node-rdkafka'
+
+reader
+  .on('message', msg => {
+    const pkg: Pkg = JSON.parse(msg.body.toString())
+    console.log(`pkg: ${pkg.channel} ${pkg.type} ${pkg.dataType}`)
+
+    msg.finish()
+
+  })
 

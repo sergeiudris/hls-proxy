@@ -7,12 +7,9 @@ import * as cookieParser from 'cookie-parser'
 import * as bodyParser from 'body-parser'
 import * as serveIndex from 'serve-index'
 
-import routeApi from './route/api'
+import { logger } from './logger';
+import { PORT } from './config';
 
-import * as config from '../config'
-import { logger } from '../logger';
-
-const PORT = config.PORT
 
 const NODE_ENV = process.env.NODE_ENV;
 
@@ -39,10 +36,27 @@ app.use(express.static('dist/scripts'))
 app.use('/logs', serveIndex('logs', { icons: true }))
 app.use('/logs', express.static('logs'))
 
-app.use('/api', routeApi);
 
 app.get('/', (req: express.Request, res: express.Response, next: Function) => {
-  res.send('HI')
+  res.send('OK')
+})
+app.get('/health', (req, res, next) => {
+  res.json('OK')
+})
+
+app.get('/api/:key', function (req: Request, res: Response, next: NextFunction) {
+  const key = req.params.key;
+
+  res.json({ key: key });
+
+})
+
+app.get('/random', function (req: Request, res: Response, next: NextFunction) {
+
+  const random = Math.random().toString()
+
+  res.json({ random });
+
 })
 
 // catch 404 and forward to error handler
@@ -65,3 +79,6 @@ app.listen(PORT, () => {
 }).on('error', err => {
   logger.error('Cannot start server, port most likely in use', err);
 });
+
+
+
