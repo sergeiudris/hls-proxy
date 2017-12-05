@@ -13,10 +13,13 @@
 #docker rmi -f $(docker images -q)
 
 
-HOST_NAME=host
+HOSTNAME=host
 USERNAME=user
-HOST_SSH=$USERNAME@$HOST_NAME
+HOST_SSH=$USERNAME@$HOSTNAME
 DIR_STREAMING=/opt/streaming
+REGISTRY_HOST_LOCAL=127.0.0.1:5001
+REGISTRY_HOST_REMOTE=host:5001
+
 
 test() {
   echo "TEST $1";
@@ -82,14 +85,21 @@ down_sys(){
 }
 
 dc_prod(){
-   HOSTNAME=host REGISTRY_HOST=127.0.0.1:5001 docker-compose \
+   HOSTNAME=${HOSTNAME} REGISTRY_HOST=${REGISTRY_HOST_LOCAL} docker-compose \
     -f dc-base.yml \
     -f dc-nsq.yml \
     -f dc-nginx.yml \
     -f dc-streaming.yml \
     "$@"
 }
+
+pull(){
+  docker pull traefik && docker tag traefik ${REGISTRY_HOST_REMOTE}/traefik && \
+  docker pull nsqio/nsq && docker tag nsqio/nsq ${REGISTRY_HOST_REMOTE}/nsq
+}
+
 dc(){
+
   docker-compose \
     -f dc-base.yml \
     -f dc-nsq.yml \
@@ -97,6 +107,7 @@ dc(){
     -f dc-streaming.yml \
     "$@"
 }
+
 dc_dev(){
   docker-compose \
     -f dc-base.yml \
@@ -105,7 +116,6 @@ dc_dev(){
     -f dc-streaming.yml -f dc-streaming-dev.yml \
     "$@"
 }
-
 
 up(){
   docker-compose -f dc-base.yml build && \
@@ -124,21 +134,12 @@ down(){
    down
 }
 
-up_prod(){
-  REGISTRY_HOST=127.0.0.1 docker-compose -f dc-nsq.yml -f dc-streaming.yml up -d
-}
-
-down_prod(){
-  REGISTRY_HOST=127.0.0.1 docker-compose --f dc-nsq.yml -f dc-streaming.yml down
-}
-
 registry_start(){
   docker run -d -p 5001:5000 --restart=always --name registry registry:2.6.2
 }
 
-#as su
 portainer(){
-  docker run -d -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock portainer/portainer -H unix:///var/run/docker.sock
+  sudo docker run -d -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock portainer/portainer -H unix:///var/run/docker.sock
 }
 
 

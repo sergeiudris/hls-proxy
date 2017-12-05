@@ -135,7 +135,7 @@ export const StreamStream =
                   terminate
                 </Button>
                 <Button raised dense className={classes.button} onClick={this.onscreenshot}>
-                  screenshot
+                  screenshott
                 </Button>
                 <Button raised dense className={classes.button} onClick={this.onrecord}>
                   {this.isRecording.get() ? 'stop recording': 'start recording' }
@@ -198,8 +198,13 @@ class VideoHls extends React.Component<{
       // hls.loadSource('http://127.0.0.1:8080/play/hls/sintel/index.m3u8');
 
       hls.on(Hls.Events.ERROR, (event, data) => {
-        if (data.details === Hls.ErrorDetails.INTERNAL_EXCEPTION) {
-          console.log('exception in ' + event + ',stack trace:' + JSON.stringify(data));
+        // if (data.details === Hls.ErrorDetails.INTERNAL_EXCEPTION) {
+        //   console.log('exception in ' + event + ',stack trace:' + JSON.stringify(data));
+        // }
+        if(data.type == Hls.ErrorTypes.MEDIA_ERROR && data.fatal){
+          // console.warn(data)
+            console.warn('hls recovering after media error')
+            hls.recoverMediaError()
         }
       })
 
