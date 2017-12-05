@@ -2,9 +2,9 @@
 ## streaming
 
 *enviroment variables are in `.env` and `run.sh` files
-<br />
+
 *services are described in .yml files
-<br />
+
 *be sure docker-compose 1.17 or higher is installed (you probably need `Docker Edge` build)
 
 ### run locally ###
