@@ -38,9 +38,7 @@ interface State {
 export class Hls extends React.Component<PropsState & PropsDispatch & Props, State> {
 
   render() {
-
-    console.warn(this.props.store)
-
+    console.log('render hls')
     return (
       <div>
         hls

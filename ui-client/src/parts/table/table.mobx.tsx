@@ -8,7 +8,6 @@ import { Store, Stores } from 'src/store'
 
 export const Table =
   inject<Stores, TableComp.Props, TableComp.Props, {}>(({ store }, np, ctx) => {
-    console.warn(store)
     const props: TableComp.Props = {
       datasets: store.datasets,
       datasetsInfo: store.datasetsInfo,

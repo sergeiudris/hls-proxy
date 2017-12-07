@@ -39,7 +39,7 @@ export class Mjpeg extends React.Component<PropsState & PropsDispatch & Props, S
 
   render() {
 
-    console.warn(this.props.store)
+    console.log('render mjpeg')
 
     return (
       <div>

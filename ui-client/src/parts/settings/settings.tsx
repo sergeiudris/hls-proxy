@@ -39,7 +39,7 @@ export class Settings extends React.Component<PropsState & PropsDispatch & Props
 
   render() {
 
-    console.warn(this.props.store)
+    console.log('render settings')
 
     return (
       <div>

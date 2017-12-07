@@ -23,7 +23,7 @@ export class AppHeader extends React.Component<Props, State> {
 
   render() {
 
-    console.warn('render app header')
+    console.log('render header')
     return (
       <Header className="header"
         style={{ position: 'fixed', width: '100%', paddingLeft: 0 }}

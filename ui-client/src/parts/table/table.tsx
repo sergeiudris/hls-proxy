@@ -96,7 +96,7 @@ export class TableView extends React.Component<Props, State> {
   }
 
   render() {
-    console.warn('render streams')
+    console.log('render table')
     const rowSelection = {
       onChange: this.onSelectChange,
       getCheckboxProps: record => ({

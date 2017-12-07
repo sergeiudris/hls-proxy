@@ -39,8 +39,7 @@ export class Board extends React.Component<PropsState & PropsDispatch & Props, S
 
   render() {
 
-    console.warn(this.props.store)
-
+    console.log('render board')
     return (
       <div>
         board
