@@ -28,13 +28,15 @@ export class AppHeader extends React.Component<Props, State> {
       <Header className="header"
         style={{ position: 'fixed', width: '100%', paddingLeft: 0 }}
       >
-        <h4 style={{
+        <h3 style={{
           float: 'left',
           // width:'120px',
           // height: '32px',
+          textAlign:'center',
           background: 'rgba(255,255,255,.2)',
-          padding: '0 64px'
-        }}>streaming-client</h4>
+          // padding: '0 64px'
+          width: '200px'
+        }}>streaming-client</h3>
         <Menu
           theme="dark"
           mode="horizontal"

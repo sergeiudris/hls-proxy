@@ -69,7 +69,7 @@ export class App extends React.Component<any, any>{
             <AppHeader />
             <Layout style={{ padding: '0', marginTop: 64 }}>
               <Sidebar />
-              <Layout style={{ padding: '0px 24px 24px' }}>
+              <Layout style={{ padding: '24px 24px 24px' }}>
                 {/* <Breadcrumb style={{ margin: '16px 0' }}>
                   <Breadcrumb.Item>not</Breadcrumb.Item>
                   <Breadcrumb.Item>yet</Breadcrumb.Item>

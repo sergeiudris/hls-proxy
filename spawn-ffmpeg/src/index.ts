@@ -18,6 +18,7 @@ import { FFMpegStream } from './ffmpeg-stream'
 import { app } from './express-app'
 import { STREAMS, startStream, stopStream } from './state'
 
+const MAX_STREAM_COUNT = 3
 
 process.on('exit', () => {
   STREAMS.forEach((stream) => {
@@ -68,7 +69,7 @@ export function onevent(pkg: Pkg<Pkg.FFmpeg>) {
       publishStatus(stream.state)
       return
     }
-    if(STREAMS.length > 3){
+    if(STREAMS.length > MAX_STREAM_COUNT){
       const oldestStream = STREAMS[0]
       stopStream(oldestStream.options.id)
     }

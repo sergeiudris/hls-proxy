@@ -184,7 +184,7 @@ export class TableView extends React.Component<Props, State> {
         </div>
         <Table
           bordered
-          pagination={{ pageSize: 30 }} scroll={{ y: '60vh' }}
+          pagination={{pageSizeOptions: ['10', '25', '50', '100','200'],    showSizeChanger: true,  pageSize: 50 }} scroll={{ y: '60vh' }}
           columns={columns}
           rowSelection={rowSelection}
           dataSource={data}

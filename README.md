@@ -5,7 +5,7 @@
 
 *services are described in .yml files
 
-*be sure docker-compose 1.17 or higher is installed? you probably need `Docker Edge` build
+*be sure docker-compose 1.17 or higher is installed, you probably need `Docker Edge` build
 
 
 ### run locally ###

@@ -8,7 +8,7 @@ export const NavLinkStyled = styled(NavLink).attrs({
 }) `
   // cursor: pointer;
   // user-select: none;
-  // display: flex;
+  display: block;
   // flex-direction: column;
   // align-items: center;
   // justify-content: center;
