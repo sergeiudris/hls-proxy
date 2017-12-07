@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { inject } from 'mobx-react'
 import { Cams } from '@streaming/types'
-import * as StreamsComp from './streams'
+import * as TableComp from './table'
 import { Store, Stores } from 'src/store'
 
 
 
-export const Streams =
-  inject<Stores, StreamsComp.Props, StreamsComp.Props, {}>(({ store }, np, ctx) => {
+export const Table =
+  inject<Stores, TableComp.Props, TableComp.Props, {}>(({ store }, np, ctx) => {
     console.warn(store)
-    const props: StreamsComp.Props = {
+    const props: TableComp.Props = {
       datasets: store.datasets,
       datasetsInfo: store.datasetsInfo,
       streams: store.hls.streams,
@@ -24,7 +24,7 @@ export const Streams =
       }
     }
     return props
-  })(StreamsComp.Streams)
+  })(TableComp.TableView)
 
 // import { ObjectOmit } from "typelevel-ts"; // Thanks @gcanti, we <3 you all!
 

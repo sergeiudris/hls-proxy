@@ -77,6 +77,43 @@ export class Sidebar extends React.Component<Props, State> {
             <span className="nav-text">nav 8</span>
           </Menu.Item>
         </Menu>
+        {/* <Menu theme="dark" defaultSelectedKeys={['streams/board']} mode="inline">
+          <Menu.Item key="table">
+            <Icon type="table" />
+            <span>table</span>
+          </Menu.Item>
+          <SubMenu
+            key="streams"
+            title={<span><Icon type="desktop" /><span>streams</span></span>}
+          >
+            <Menu.Item key="streams/board">board</Menu.Item>
+            <Menu.Item key="streams/hls">hls</Menu.Item>
+            <Menu.Item key="streams/mjpeg">mjpeg</Menu.Item>
+          </SubMenu>
+          <Menu.Item key="settings">
+            <Icon type="setting" />
+            <span>settings</span>
+          </Menu.Item>
+          <SubMenu
+            key="sub1"
+            title={<span><Icon type="user" /><span>User</span></span>}
+          >
+            <Menu.Item key="3">Tom</Menu.Item>
+            <Menu.Item key="4">Bill</Menu.Item>
+            <Menu.Item key="5">Alex</Menu.Item>
+          </SubMenu>
+          <SubMenu
+            key="sub2"
+            title={<span><Icon type="team" /><span>Team</span></span>}
+          >
+            <Menu.Item key="6">Team 1</Menu.Item>
+            <Menu.Item key="8">Team 2</Menu.Item>
+          </SubMenu>
+          <Menu.Item key="9">
+            <Icon type="file" />
+            <span>File</span>
+          </Menu.Item>
+        </Menu> */}
       </Sider>
     )
   }
@@ -109,3 +146,39 @@ export class Sidebar extends React.Component<Props, State> {
           </SubMenu>
         </Menu>
       </Sider> */
+
+
+    //   <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
+    //   <Menu.Item key="1">
+    //     <Icon type="user" />
+    //     <span className="nav-text">nav 1</span>
+    //   </Menu.Item>
+    //   <Menu.Item key="2">
+    //     <Icon type="video-camera" />
+    //     <span className="nav-text">nav 2</span>
+    //   </Menu.Item>
+    //   <Menu.Item key="3">
+    //     <Icon type="upload" />
+    //     <span className="nav-text">nav 3</span>
+    //   </Menu.Item>
+    //   <Menu.Item key="4">
+    //     <Icon type="bar-chart" />
+    //     <span className="nav-text">nav 4</span>
+    //   </Menu.Item>
+    //   <Menu.Item key="5">
+    //     <Icon type="cloud-o" />
+    //     <span className="nav-text">nav 5</span>
+    //   </Menu.Item>
+    //   <Menu.Item key="6">
+    //     <Icon type="appstore-o" />
+    //     <span className="nav-text">nav 6</span>
+    //   </Menu.Item>
+    //   <Menu.Item key="7">
+    //     <Icon type="team" />
+    //     <span className="nav-text">nav 7</span>
+    //   </Menu.Item>
+    //   <Menu.Item key="8">
+    //     <Icon type="shop" />
+    //     <span className="nav-text">nav 8</span>
+    //   </Menu.Item>
+    // </Menu>

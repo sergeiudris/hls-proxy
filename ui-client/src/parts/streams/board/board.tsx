@@ -28,14 +28,14 @@ interface State {
 }
 
 
-@(connect<PropsState, PropsDispatch, Props, Store>(
-  (state) => ({
-    store: state
-  }), (dispatch) => ({
-    dispatch: dispatch
-  })
-) as any)
-export class Mjpeg extends React.Component<PropsState & PropsDispatch & Props, State> {
+// @(connect<PropsState, PropsDispatch, Props, Store>(
+//   (state) => ({
+//     store: state
+//   }), (dispatch) => ({
+//     dispatch: dispatch
+//   })
+// ) as any)
+export class Board extends React.Component<PropsState & PropsDispatch & Props, State> {
 
   render() {
 
@@ -43,7 +43,7 @@ export class Mjpeg extends React.Component<PropsState & PropsDispatch & Props, S
 
     return (
       <div>
-        mjpeg
+        board
       </div>
     )
   }

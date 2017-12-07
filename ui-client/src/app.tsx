@@ -19,7 +19,7 @@ const { Header, Content, Sider } = Layout;
 
 
 import { asyncComponent } from 'src/modules/async-component'
-import { AppHeader, Sidebar } from './views/layout'
+import { AppHeader, Sidebar } from './parts/layout'
 
 
 import { history } from './history'
@@ -33,22 +33,23 @@ declare var NODE_ENV
 
 
 const HlsView = asyncComponent(() =>
-  System.import('src/views/hls').then(module => module.Hls)
+  System.import('src/parts/streams/hls').then(module => module.Hls)
 )
-
-
 const MjpegView = asyncComponent(() =>
-  System.import('src/views/mjpeg').then(module => module.Mjpeg)
+  System.import('src/parts/streams/mjpeg').then(module => module.Mjpeg)
 )
-
+const BoardView = asyncComponent(() =>
+  System.import('src/parts/streams/board').then(module => module.Board)
+)
 
 const SettingsView = asyncComponent(() =>
-  System.import('src/views/settings').then(module => module.Settings)
+  System.import('src/parts/settings').then(module => module.Settings)
+)
+const TableView = asyncComponent(() =>
+  System.import('src/parts/table').then(module => module.Table)
 )
 
-const StreamsView = asyncComponent(() =>
-  System.import('src/views/streams').then(module => module.Streams)
-)
+
 
 export class App extends React.Component<any, any>{
 
@@ -66,7 +67,7 @@ export class App extends React.Component<any, any>{
         <Router history={history}>
           <Layout style={{ minHeight: '100vh' }}>
             <AppHeader />
-            <Layout style={{padding: '0', marginTop: 64 }}>
+            <Layout style={{ padding: '0', marginTop: 64 }}>
               <Sidebar />
               <Layout style={{ padding: '0px 24px 24px' }}>
                 {/* <Breadcrumb style={{ margin: '16px 0' }}>
@@ -76,10 +77,12 @@ export class App extends React.Component<any, any>{
                 </Breadcrumb> */}
                 <Content style={{ background: '#fff', padding: 24, margin: 0, minHeight: 280 }}>
                   <Switch>
-                    <Route exact path={`/`} render={() => <Redirect to={'/streams'} />} />
-                    <Route path={`/streams`} component={StreamsView} />
-                    <Route path={'/hls'} component={HlsView} />
-                    <Route path={`/mjpeg`} component={MjpegView} />
+                    <Route exact path={`/`} render={() => <Redirect to={'/table'} />} />
+                    <Route exact path={`/streams`} render={() => <Redirect to={'/streams/board'} />} />
+                    <Route path={'/streams/board'} component={BoardView} />
+                    <Route path={'/streams/hls'} component={HlsView} />
+                    <Route path={`/streams/mjpeg`} component={MjpegView} />
+                    <Route path={`/table`} component={TableView} />
                     <Route path={`/settings`} component={SettingsView} />
                   </Switch>
                 </Content>
@@ -94,18 +97,18 @@ export class App extends React.Component<any, any>{
 
 injectGlobal`
       html {
-        /* height: 100%; */
-        box-sizing: border-box;
+          /* height: 100%; */
+          box - sizing: border-box;
         // font-size: 10px !important;
         // line-height: 0.8em;
       }
 
       *, *:before, *:after {
-          box-sizing: inherit;
+          box - sizing: inherit;
       }
 
       body {
-          margin:0;
+          margin: 0;
         padding: 0;
         /* height: 100%; */
       }

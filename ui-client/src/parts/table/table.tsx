@@ -29,7 +29,7 @@ interface State {
 }
 
 
-export class Streams extends React.Component<Props, State> {
+export class TableView extends React.Component<Props, State> {
 
   searchInput: Input
 
