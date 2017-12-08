@@ -20,27 +20,3 @@ writer
   })
 
 writer.connect()
-
-// export function publish<T = any>(data: T) {
-//   publishEvent({
-//     topic: 'streaming',
-//     from: 'spawn-hls',
-//     timestamp: Date.now(),
-//     data: data
-//   })
-// }
-
-export function publishStatus(state: FFmpeg.State) {
-  const pkg: Pkg<Pkg.FFmpeg> = {
-    topic: Pkg.Topic.STREAMING,
-    channel: 'spawn-hls',
-    type: Pkg.Type.ECHO,
-    timestamp: Date.now(),
-    dataType: Pkg.DataType.FFMPEG,
-    data: {
-      type: FFmpeg.Type.STATUS,
-      state: state
-    }
-  }
-  writer.publish(pkg.topic, JSON.stringify(pkg))
-}

@@ -3,52 +3,15 @@ import { logger } from './logger'
 import * as WebSocket from 'ws'
 import { Cams, FFmpeg, Evt, Pkg } from '@streaming/types'
 import { NSQD_PORT, NSQD_HOSTNAME, NSQLOOKUPD_HOST, PORT_WSS } from './config'
+import { reader } from './reader'
+import { writer } from './writer'
 
 
 // process.on('uncaughtException', (err) => {
 //   logger.error('uncaughtException', '\n', err.stack)
 // })
 
-
-export const WRITER = new Writer(NSQD_HOSTNAME, NSQD_PORT)
-WRITER.on('ready', () => {
-  // w.publish('sample_topic', 'it really tied the room together')
-  // w.publish('sample_topic', 'This message gonna arrive 1 sec later.', 1000 as any)
-  // w.publish('sample_topic', [
-  //   'Uh, excuse me. Mark it zero. Next frame.',
-  //   'Smokey, this is not \'Nam. This is bowling. There are rules.'
-  // ])
-  // w.publish('sample_topic', 'Wu?', err => {
-  //   if (err) { return console.error(err.message) }
-  //   console.log('Message sent successfully')
-  //   w.close()
-  // })
-})
-
-WRITER.on('closed', () => {
-  console.log('Writer closed')
-})
-
-WRITER.on('ready', () => {
-  logger.info(`writer ready, connected to ${NSQD_PORT}`)
-})
-
-WRITER.on('error', (err) => {
-  logger.info(`writer error`, err.message)
-})
-
-WRITER.connect()
-
-
-
-
-
-export const READER = new Reader(Pkg.Topic.STREAMING, 'hub', {
-  lookupdHTTPAddresses: NSQLOOKUPD_HOST,
-  maxInFlight: 1000,
-})
-
-READER.on('message', msg => {
+reader.on('message', msg => {
   // logger.warn('before broadcast', JSON.parse(msg.body.toString()))
   // if(msg.hasResponded){
   //   logger.warn('has responded', JSON.parse(msg.body.toString()))
@@ -71,29 +34,21 @@ READER.on('message', msg => {
 
 })
 
-READER.on('nsqd_connected', () => {
-  logger.info(`nsqd_connected, ${NSQD_PORT}`)
-})
-
-READER.connect()
 
 
-
-
-
-export const WSS = new WebSocket.Server({
+export const wss = new WebSocket.Server({
   port: PORT_WSS
 } as WebSocket.ServerOptions, () => {
-  logger.info(`wssHub started, port ${WSS.options.port}`)
+  logger.info(`wssHub started, port ${wss.options.port}`)
 });
 
-WSS.on('connection', (client: WebSocket) => {
+wss.on('connection', (client: WebSocket) => {
   logger.info(`client connected`)
   client.on('message', data => {
     const pkgString = data.toString()
     const pkg: Pkg = JSON.parse(pkgString)
     logger.info(`publishing: ${pkg.channel} ${pkg.type} ${pkg.dataType}`)
-    WRITER.publish(pkg.topic, pkgString, (err) => {
+    writer.publish(pkg.topic, pkgString, (err) => {
       if (err) {
         logger.warn(err.message)
       }
@@ -104,12 +59,12 @@ WSS.on('connection', (client: WebSocket) => {
   })
 });
 
-WSS.on('error', (err) => {
+wss.on('error', (err) => {
   logger.error(err.message)
 })
 
 export function broadcast(pkg: Pkg) {
-  WSS.clients.forEach((client) => {
+  wss.clients.forEach((client) => {
     if (client.readyState === WebSocket.OPEN) {
       client.send(JSON.stringify(pkg));
     }

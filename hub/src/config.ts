@@ -10,6 +10,7 @@ interface Env {
 }
 
 export const HOSTNAME = '127.0.0.1'
+export const CHANNEL = 'hub'
 const env: Env & NodeJS.ProcessEnv = process.env as any
 
 export const NSQLOOKUPD_HOSTNAME = env.NSQLOOKUPD_HOSTNAME || HOSTNAME

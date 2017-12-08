@@ -24,20 +24,3 @@ reader
   })
 
 reader.connect()
-
-
-
-
-// setInterval(() => {
-
-//   publish<Evt.FFmpeg.Type.I.ERROR>({
-//     data: {
-//       type: Evt.FFmpeg.Type.E.ERROR,
-//       err: 'manual'
-//     },
-//     timestamp: Date.now(),
-//     topic: 'streaming',
-//     channel: 'ffmpeg'
-//   })
-
-// }, 5000)

@@ -330,38 +330,38 @@ const config: webpack.Configuration = {
   ]
 }
 
-// if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production') {
 
-//   config.plugins.push(
-//     new ExtractTextPlugin('styles.[hash].css'),
-//     // this is needed in webpack 2 for minifying CSS
-//     new webpack.LoaderOptionsPlugin({
-//       minimize: true
-//     }),
-//     // minify JS
-//     new webpack.optimize.UglifyJsPlugin({
-//       parallel: {
-//         cache: false,
-//         workers: 2 // for e.g
-//       },
-//       beautify: false,
-//       mangle: {
-//         screw_ie8: true,
-//         keep_fnames: false
-//       },
-//       compress: {
-//         dead_code: false,
-//         screw_ie8: true,
-//         warnings: false
-//       },
-//       comments: false
-//     }),
-//     // new StatsWriterPlugin({
-//     //   filename: "stats.json", // Default,
-//     //   fields: null,
-//     //   stats: { chunkModules: true }
-//     // })
-//   )
-// }
+  config.plugins.push(
+    new ExtractTextPlugin('styles.[hash].css'),
+    // this is needed in webpack 2 for minifying CSS
+    new webpack.LoaderOptionsPlugin({
+      minimize: true
+    }),
+    // minify JS
+    new webpack.optimize.UglifyJsPlugin({
+      parallel: {
+        cache: false,
+        workers: 2 // for e.g
+      },
+      beautify: false,
+      mangle: {
+        screw_ie8: true,
+        keep_fnames: false
+      },
+      compress: {
+        dead_code: false,
+        screw_ie8: true,
+        warnings: false
+      },
+      comments: false
+    }),
+    // new StatsWriterPlugin({
+    //   filename: "stats.json", // Default,
+    //   fields: null,
+    //   stats: { chunkModules: true }
+    // })
+  )
+}
 
 module.exports = config
