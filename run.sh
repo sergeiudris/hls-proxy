@@ -65,6 +65,7 @@ rmi(){
   docker rmi -f $(docker images -q)
 }
 
+
 # remove all containers (do not do this)
 rm(){
   docker rm $(docker ps -a -q)
@@ -120,6 +121,22 @@ hls(){
   ffmpeg  -y -rtsp_transport tcp -i rtsp://host:554/57 -c:v libx264 -s 1280x720 -f mpegts http://host:1840/publish/asd
 
 }
+# dc_files(){
+#     dirUser=/home/user/camera-streaming
+#     dirRoot=/opt/camera-streaming
+#   # ssh -t $HOST_SSH sudo supervisorctl stop $group:*
+#     scp -r ./$service/dist $HOST_SSH:$dirUser
+#     ssh -t $HOST_SSH "
+#       sudo rm -rf $dirRoot ;
+#       echo removed $dirRoot;
+#       sudo mkdir -p  $dirRoot ;
+#       sudo mv $dirUser/* $dirRoot ;
+#       sudo rm -rf $dirUser ;
+#       "
+# }
+
+
+
 # start_nginx(){
 #   ssh -t $HOST_SSH "
 #     sudo $DIR_STREAMING/nginx/ts/sbin/nginx &
