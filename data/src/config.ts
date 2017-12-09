@@ -9,11 +9,12 @@ interface Env {
   NSQLOOKUPD_PORT: number
   NSQD_PORT: number
   PORT: number
+  HOSTNAME: string
 }
 
-export const HOSTNAME = '127.0.0.1'
 const env: Env & NodeJS.ProcessEnv = process.env as any
-
+export const HOSTNAME = env.HOSTNAME || '127.0.0.1'
+export const REGISTRY_HOST = env.REGISTRY_HOST
 export const NSQLOOKUPD_HOSTNAME = env.NSQLOOKUPD_HOSTNAME || HOSTNAME
 export const NSQD_HOSTNAME = env.NSQD_HOSTNAME || HOSTNAME
 export const NSQADMIN_HOSTNAME = env.NSQADMIN_HOSTNAME || HOSTNAME

@@ -11,6 +11,7 @@ import routeFiles from './files'
 import routeApi from './api'
 
 import { PORT } from './config'
+import * as config from './config'
 import { logger } from './logger';
 
 
@@ -44,7 +45,7 @@ app.use('/files', routeFiles);
 app.use('/api', routeApi);
 
 app.get('/', (req: express.Request, res: express.Response, next: Function) => {
-  res.send('OK')
+  res.send(JSON.stringify(config,null,2))
 })
 
 // catch 404 and forward to error handler

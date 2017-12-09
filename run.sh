@@ -32,7 +32,10 @@ pull_tag_remote(){
 
 # use this for local development
 dc_local(){
-  HOSTNAME=${HOSTNAME_LOCAL} REGISTRY_HOST=${REGISTRY_HOST_LOCAL} docker-compose \
+    echo ${REGISTRY_HOST_LOCAL}
+    REGISTRY_HOST=${REGISTRY_HOST_LOCAL}
+    HOSTNAME=${HOSTNAME_LOCAL}
+   docker-compose \
     -f dc-base.yml \
     -f dc-nsq.yml \
     -f dc-nginx.yml \
@@ -42,7 +45,7 @@ dc_local(){
 
 # use this alias on production server
 dc_prod(){
-  HOSTNAME=${HOSTNAME_REMOTE} REGISTRY_HOST=${REGISTRY_HOST_LOCAL} docker-compose \
+  REGISTRY_HOST=${REGISTRY_HOST_LOCAL} docker-compose \
     -f dc-base.yml \
     -f dc-nsq.yml \
     -f dc-nginx.yml \
@@ -52,7 +55,7 @@ dc_prod(){
 
 # use this for building images locally (to push to prod registry)
 dc_remote(){
-  HOSTNAME=${HOSTNAME_REMOTE} REGISTRY_HOST=${REGISTRY_HOST_REMOTE} docker-compose \
+  REGISTRY_HOST=${REGISTRY_HOST_REMOTE} docker-compose \
     -f dc-base.yml \
     -f dc-nsq.yml \
     -f dc-nginx.yml \
