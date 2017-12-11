@@ -68,6 +68,11 @@ reader
 
 function onPkgStream(pkg: Pkg<Pkg.Stream>) {
 
+  if(!pkg.data.state.id || ! pkg.data.state.ffmpeg.url_src){
+    logger.warn(`STREAM START: no cam_url`)
+    return
+  }
+
   const cam = getCamera(pkg.data.state.id, pkg.data.state.ffmpeg.url_src)
 
   // cam.touch()

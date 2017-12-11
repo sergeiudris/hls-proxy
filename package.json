@@ -19,9 +19,9 @@
   "dependencies": {},
   "devDependencies": {
     "commitizen": "2.9.6",
-    "cross-env": "5.0.5",
-    "cz-conventional-changelog": "2.0.0",
-    "lerna": "2.4.0",
+    "cross-env": "5.1.1",
+    "cz-conventional-changelog": "2.1.0",
+    "lerna": "2.5.1",
     "standard-version": "4.2.0"
   },
   "config": {

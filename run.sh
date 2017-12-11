@@ -21,11 +21,15 @@ REGISTRY_HOST_REMOTE=host:5001
 
 
 pull_tag_local(){
+  docker pull portainer/portainer && docker tag portainer/portainer ${REGISTRY_HOST_LOCAL}/portainer && \
+  docker pull registry && docker tag registry ${REGISTRY_HOST_LOCAL}/registry && \
   docker pull traefik && docker tag traefik ${REGISTRY_HOST_LOCAL}/traefik && \
   docker pull nsqio/nsq && docker tag nsqio/nsq ${REGISTRY_HOST_LOCAL}/nsq
 }
 
 pull_tag_remote(){
+  docker pull portainer/portainer && docker tag portainer/portainer ${REGISTRY_HOST_REMOTE}/portainer && \
+  docker pull registry && docker tag registry ${REGISTRY_HOST_REMOTE}/registry && \
   docker pull traefik && docker tag traefik ${REGISTRY_HOST_REMOTE}/traefik && \
   docker pull nsqio/nsq && docker tag nsqio/nsq ${REGISTRY_HOST_REMOTE}/nsq
 }
