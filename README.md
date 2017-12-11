@@ -5,7 +5,9 @@
 
 *services are described in .yml files
 
-*be sure docker-compose 1.17 or higher is installed, you probably need `Docker Edge` build
+*be sure docker 17.11 or higher is installed, you probably need `Docker Edge` build
+
+*on prod (host) docker is 17.03, so you need to uncomment `HOSTNAME` and `REGISTRY_HOST` in .env file for `'dc_prod pull'`  `'dc_prod up -d'` to work (passing from run.sh does not work)
 
 
 ### run locally ###
