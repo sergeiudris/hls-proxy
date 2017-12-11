@@ -7,11 +7,12 @@ interface Env {
   NSQD_PORT: number
   PORT: number
   PORT_WSS: number
+  HOSTNAME: string
 }
 
-export const HOSTNAME = '127.0.0.1'
 export const CHANNEL = 'hub'
 const env: Env & NodeJS.ProcessEnv = process.env as any
+export const HOSTNAME = env.HOSTNAME || 'localhost'
 
 export const NSQLOOKUPD_HOSTNAME = env.NSQLOOKUPD_HOSTNAME || HOSTNAME
 export const NSQD_HOSTNAME = env.NSQD_HOSTNAME || HOSTNAME

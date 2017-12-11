@@ -13,7 +13,7 @@ USERNAME=user
 HOST_SSH=$USERNAME@$HOSTNAME
 DIR_STREAMING=/opt/streaming
 
-HOSTNAME_LOCAL=127.0.0.1:5001
+HOSTNAME_LOCAL=127.0.0.1
 REGISTRY_HOST_LOCAL=127.0.0.1:5001
 
 HOSTNAME_REMOTE=host
@@ -34,44 +34,34 @@ pull_tag_remote(){
   docker pull nsqio/nsq && docker tag nsqio/nsq ${REGISTRY_HOST_REMOTE}/nsq
 }
 
-# use this for local development
-dc_local(){
-    echo ${REGISTRY_HOST_LOCAL}
-    REGISTRY_HOST=${REGISTRY_HOST_LOCAL}
-    HOSTNAME=${HOSTNAME_LOCAL}
-   docker-compose \
+dc(){
+  docker-compose \
     -f dc-base.yml \
     -f dc-nsq.yml \
     -f dc-nginx.yml \
     -f dc-streaming.yml \
     "$@"
+}
+
+# use this for local development
+dc_local(){
+  REGISTRY_HOST=${REGISTRY_HOST_LOCAL} HOSTNAME=${HOSTNAME_LOCAL} dc "$@"
 }
 
 # use this alias on production server
 dc_prod(){
-  REGISTRY_HOST=${REGISTRY_HOST_LOCAL} docker-compose \
-    -f dc-base.yml \
-    -f dc-nsq.yml \
-    -f dc-nginx.yml \
-    -f dc-streaming.yml \
-    "$@"
+  REGISTRY_HOST=${REGISTRY_HOST_LOCAL} HOSTNAME=${HOSTNAME_REMOTE} dc "$@"
 }
 
 # use this for building images locally (to push to prod registry)
 dc_remote(){
-  REGISTRY_HOST=${REGISTRY_HOST_REMOTE} docker-compose \
-    -f dc-base.yml \
-    -f dc-nsq.yml \
-    -f dc-nginx.yml \
-    -f dc-streaming.yml \
-    "$@"
+  REGISTRY_HOST=${REGISTRY_HOST_REMOTE} HOSTNAME=${HOSTNAME_REMOTE} dc "$@"
 }
 
 # remove all images (do not do this)
 rmi(){
   docker rmi -f $(docker images -q)
 }
-
 
 # remove all containers (do not do this)
 rm(){
@@ -97,10 +87,6 @@ ssh(){
 
 chmode(){
   chmod +x ./caddy/caddy
-}
-
-ech(){
-  echo $@
 }
 
 copy(){
