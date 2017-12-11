@@ -20,6 +20,22 @@ HOSTNAME_REMOTE=host
 REGISTRY_HOST_REMOTE=host:5001
 
 
+# use this for local development
+dc_local(){
+  REGISTRY_HOST=${REGISTRY_HOST_LOCAL} HOSTNAME=${HOSTNAME_LOCAL} dc "$@"
+}
+
+# use this alias on production server
+dc_prod(){
+  REGISTRY_HOST=${REGISTRY_HOST_LOCAL} HOSTNAME=${HOSTNAME_REMOTE} dc "$@"
+}
+
+# use this for building images locally (to push to prod registry)
+dc_remote(){
+  REGISTRY_HOST=${REGISTRY_HOST_REMOTE} HOSTNAME=${HOSTNAME_REMOTE} dc "$@"
+}
+
+
 pull_tag_local(){
   docker pull portainer/portainer && docker tag portainer/portainer ${REGISTRY_HOST_LOCAL}/portainer && \
   docker pull registry && docker tag registry ${REGISTRY_HOST_LOCAL}/registry && \
@@ -43,20 +59,6 @@ dc(){
     "$@"
 }
 
-# use this for local development
-dc_local(){
-  REGISTRY_HOST=${REGISTRY_HOST_LOCAL} HOSTNAME=${HOSTNAME_LOCAL} dc "$@"
-}
-
-# use this alias on production server
-dc_prod(){
-  REGISTRY_HOST=${REGISTRY_HOST_LOCAL} HOSTNAME=${HOSTNAME_REMOTE} dc "$@"
-}
-
-# use this for building images locally (to push to prod registry)
-dc_remote(){
-  REGISTRY_HOST=${REGISTRY_HOST_REMOTE} HOSTNAME=${HOSTNAME_REMOTE} dc "$@"
-}
 
 # remove all images (do not do this)
 rmi(){
