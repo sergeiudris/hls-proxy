@@ -1,5 +1,6 @@
 
 import { Cams } from '@streaming/types'
+import * as config from './config'
 
 // interface Env {
 //   NSQLOOKUPD_HOSTNAME: string
@@ -17,22 +18,8 @@ import { Cams } from '@streaming/types'
 
 
 
-const API_ORIGIN = window.location.origin
 
-export const HUB_PORT = 1805
-export const HUB_PORT_WSS = 1100
-// export const SERVICE_HOSTNAME = 'host'
-export const SERVICE_HOSTNAME = location.hostname
 
-export const DATA_PORT = 1825
-export const SPAWN_FFMPEG_HOST = `http://${location.hostname}:${1806}`
-// export const HUB_HOSTNAME = NODE_ENV == 'production' ? 'host' : '127.0.0.1'
-
-export const HUB_HOSTNAME = location.hostname
-// export const HUB_HOSTNAME = 'host'
-export const HUB_HOST_WS = `ws://${HUB_HOSTNAME}:${HUB_PORT_WSS}`
-
-export const DATA_HOST = `http://${SERVICE_HOSTNAME}:${DATA_PORT}`
 
 
 
@@ -46,8 +33,8 @@ export async function fetchJson<R = any>(url: string, query: string = '', partia
   return json
 }
 
-export const fetchDatasetsInfo = () => fetchJson<Cams.DatasetInfo[]>(`${DATA_HOST}/datasets.json`)
+export const fetchDatasetsInfo = () => fetchJson<Cams.DatasetInfo[]>(`${config.DATA_HOST}/datasets.json`)
 
-export const fetchDataset = (name: string) => fetchJson<Cams.Dataset>(`${DATA_HOST}/dataset-2/${name}`)
-export const terminateAllStreams = () => fetchJson<any[]>(`${SPAWN_FFMPEG_HOST}/stop-all`)
+export const fetchDataset = (name: string) => fetchJson<Cams.Dataset>(`${config.DATA_HOST}/dataset-2/${name}`)
+export const terminateAllStreams = () => fetchJson<any[]>(`${config.SPAWN_FFMPEG_HOST}/stop-all`)
 

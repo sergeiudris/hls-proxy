@@ -32,7 +32,7 @@ export class AppHeader extends React.Component<Props, State> {
           float: 'left',
           // width:'120px',
           // height: '32px',
-          textAlign:'center',
+          textAlign: 'center',
           background: 'rgba(255,255,255,.2)',
           // padding: '0 64px'
           width: '200px'
@@ -44,7 +44,10 @@ export class AppHeader extends React.Component<Props, State> {
           selectedKeys={[]}
           style={{ lineHeight: '64px', height: '64px' }}
         >
-          <SubMenu
+          <MenuItem key="streams">
+            <NavLinkStyledPadding to="/streams">streams</NavLinkStyledPadding>
+          </MenuItem>
+          {/* <SubMenu
             key="/streams"
             title={
               <NavLinkStyled to="/streams">streams</NavLinkStyled>
@@ -59,12 +62,12 @@ export class AppHeader extends React.Component<Props, State> {
             <MenuItem key="/streams/mjpeg">
               <NavLinkStyled to="/streams/mjpeg">mjpeg</NavLinkStyled>
             </MenuItem>
-          </SubMenu>
-          <MenuItem key="table">
+          </SubMenu> */}
+          {/* <MenuItem key="table">
             <NavLinkStyled to="/table">table</NavLinkStyled>
-          </MenuItem>
+          </MenuItem> */}
           <MenuItem key="settings">
-            <NavLinkStyled to="/settings">settings</NavLinkStyled>
+            <NavLinkStyledPadding to="/settings">settings</NavLinkStyledPadding>
           </MenuItem>
         </Menu>
       </Header>
@@ -72,6 +75,14 @@ export class AppHeader extends React.Component<Props, State> {
   }
 
 }
+
+
+export const NavLinkStyledPadding = NavLinkStyled.extend`
+
+  padding: 0 20px;
+
+`
+
 
 // <Menu theme="dark" defaultSelectedKeys={['streams/board']} mode="inline">
 // <Menu.Item key="table">

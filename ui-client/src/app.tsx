@@ -19,35 +19,27 @@ const { Header, Content, Sider } = Layout;
 
 
 import { asyncComponent } from 'src/modules/async-component'
-import { AppHeader, Sidebar } from './parts/layout'
+import { AppHeader } from './parts/layout'
 
 
 import { history } from './history'
 import { store } from './store'
-import * as hlsStore from 'src/redux/modules/hls'
-import * as appStore from 'src/redux/modules/app'
 
 
 declare var System: any
 declare var NODE_ENV
 
 
-const HlsView = asyncComponent(() =>
-  System.import('src/parts/streams/hls').then(module => module.Hls)
-)
-const MjpegView = asyncComponent(() =>
-  System.import('src/parts/streams/mjpeg').then(module => module.Mjpeg)
-)
-const BoardView = asyncComponent(() =>
-  System.import('src/parts/streams/board').then(module => module.Board)
+const StreamsView = asyncComponent(() =>
+  System.import('src/parts/streams').then(module => module.Streams)
 )
 
 const SettingsView = asyncComponent(() =>
   System.import('src/parts/settings').then(module => module.Settings)
 )
-const TableView = asyncComponent(() =>
-  System.import('src/parts/table').then(module => module.Table)
-)
+// const TableView = asyncComponent(() =>
+//   System.import('src/parts/table').then(module => module.Table)
+// )
 
 
 
@@ -65,35 +57,28 @@ export class App extends React.Component<any, any>{
     return (
       <Provider store={store}>
         <Router history={history}>
-          <Layout style={{ minHeight: '100vh' }}>
+          <Layout style={{ height: '100vh'}}>
             <AppHeader />
-            <Layout style={{ padding: '0', marginTop: 64 }}>
-              <Sidebar />
-              <Layout style={{ padding: '24px 24px 24px' }}>
-                {/* <Breadcrumb style={{ margin: '16px 0' }}>
+            {/* <Breadcrumb style={{ margin: '16px 0' }}>
                   <Breadcrumb.Item>not</Breadcrumb.Item>
                   <Breadcrumb.Item>yet</Breadcrumb.Item>
                   <Breadcrumb.Item>implemented</Breadcrumb.Item>
                 </Breadcrumb> */}
-                <Content style={{ background: '#fff', padding: 24, margin: 0, minHeight: 280 }}>
-                  <Switch>
-                    <Route exact path={`/`} render={() => <Redirect to={'/table'} />} />
-                    <Route exact path={`/streams`} render={() => <Redirect to={'/streams/board'} />} />
-                    <Route path={'/streams/board'} component={BoardView} />
-                    <Route path={'/streams/hls'} component={HlsView} />
-                    <Route path={`/streams/mjpeg`} component={MjpegView} />
-                    <Route path={`/table`} component={TableView} />
-                    <Route path={`/settings`} component={SettingsView} />
-                  </Switch>
-                </Content>
-              </Layout>
-            </Layout>
+            <Content style={{ background: '#fff', marginTop: 64, overflow: 'auto', flex: '1 1 0' }}>
+              <Switch>
+                <Route exact path={`/`} render={() => <Redirect to={'/streams'} />} />
+                <Route path={`/streams`} component={StreamsView} />
+                {/* <Route path={`/table`} component={TableView} /> */}
+                <Route path={`/settings`} component={SettingsView} />
+              </Switch>
+            </Content>
           </Layout>
         </Router>
       </Provider >
     )
   }
 }
+{/* <Sidebar /> */ }
 
 injectGlobal`
       html {

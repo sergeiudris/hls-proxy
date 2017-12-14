@@ -19,7 +19,7 @@ export const NavLinkStyled = styled(NavLink).attrs({
   // background-color: #8E9295;
   // fontSize: 1em;
   width: 100%;
-  padding: 0 20px;
+  // padding: 0 20px;
   // &:hover {
   //   background-color: #337AB8;
   //   color: #fff;

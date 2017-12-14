@@ -1,20 +1,18 @@
 import * as React from 'react';
 import { inject } from 'mobx-react'
 import { Cams } from '@streaming/types'
-import * as SidebarComp from './sidebar'
+import * as BoardComp from './board'
 import { Store, Stores } from 'src/store'
 
 
-export const Sidebar =
-  inject<Stores, SidebarComp.Props, SidebarComp.Props, {}>(({ store }, np, ctx) => {
-    const props: SidebarComp.Props = {
-      collapsed: store.siderbarCollapsed,
-      onCollapse: (collapsed) => {
-        store.sidebarToggle(collapsed)
-      },
+export const Board =
+  inject<Stores, BoardComp.Props, BoardComp.Props, {}>(({ store }, np, ctx) => {
+    const streamsSize = store.hls.streams.size
+    const props: BoardComp.Props = {
+      streams: store.hls.streams,
     }
     return props
-  })(SidebarComp.Sidebar)
+  })(BoardComp.Board)
 
 // import { ObjectOmit } from "typelevel-ts"; // Thanks @gcanti, we <3 you all!
 

@@ -5,7 +5,7 @@ import { connect, Dispatch } from 'react-redux'
 
 import { injectGlobal, ThemeProvider, THEME, withTheme } from 'src/modules/styled-components'
 
-import { Layout, Menu, Breadcrumb, Icon } from 'antd';
+import { Layout, Menu, Breadcrumb, Icon, Input } from 'antd';
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 
@@ -35,16 +35,13 @@ interface State {
 //     dispatch: dispatch
 //   })
 // ) as any)
-export class Mjpeg extends React.Component<PropsState & PropsDispatch & Props, State> {
+export class Settings extends React.Component<PropsState & PropsDispatch & Props, State> {
 
   render() {
-
-    console.log('render mjpeg')
-
     return (
-      <div>
-        mjpeg
-      </div>
+      <Content style={{ background: '#fff', height: '100%', padding: '24px' }}>
+        sseting
+      </Content>
     )
   }
 

@@ -139,28 +139,28 @@ export class TableView extends React.Component<Props, State> {
       },
       {
         title: 'url', dataIndex: 'cam.version.object.cam_url', key: 'url', width: 200,
-        sorter: (a, b) => {
-          if (!b.version.object.cam_url) return -1
-          if (!a.version.object.cam_url) return 1
-          if (a.version.object.cam_url < b.version.object.cam_url) return -1
-          if (a.version.object.cam_url > b.version.object.cam_url) return 1
+        sorter: (a: HlsStreamState, b: HlsStreamState) => {
+          if (!b.cam.version.object.cam_url) return -1
+          if (!a.cam.version.object.cam_url) return -1
+          if (a.cam.version.object.cam_url < b.cam.version.object.cam_url) return -1
+          if (a.cam.version.object.cam_url > b.cam.version.object.cam_url) return 1
           return 0
         },
       },
-      {
-        title: 'action', dataIndex: 'action', key: 'action', width: 250,
-        render: (text, record: Cams.CameraInfo) => {
-          return (
-            <div >
-              <Button type="primary" onClick={() => this.onAdd(record)} size={'small'}>add</Button>
-              &nbsp;
-              <Button onClick={() => this.onRemove(record)} size={'small'}>remove</Button>
-              &nbsp;
-              <Button type="danger" onClick={() => this.onTerminate(record)} size={'small'}>terminate</Button>
-            </div>
-          );
-        },
-      },
+      // {
+      //   title: 'action', dataIndex: 'action', key: 'action', width: 250,
+      //   render: (text, record: Cams.CameraInfo) => {
+      //     return (
+      //       <div >
+      //         <Button type="primary" onClick={() => this.onAdd(record)} size={'small'}>add</Button>
+      //         &nbsp;
+      //         <Button onClick={() => this.onRemove(record)} size={'small'}>remove</Button>
+      //         &nbsp;
+      //         <Button type="danger" onClick={() => this.onTerminate(record)} size={'small'}>terminate</Button>
+      //       </div>
+      //     );
+      //   },
+      // },
       { title: 'address', dataIndex: 'cam.version.object.address', key: 'address', width: 200, },
       {
         title: 'type', dataIndex: 'cam.version.object.type', key: 'type', width: 100,
@@ -168,7 +168,10 @@ export class TableView extends React.Component<Props, State> {
           text: d.title,
           value: String(d.type)
         })),
-        onFilter: (value, record) => record.version.object.type == value,
+        onFilter: (value, record: HlsStreamState) => {
+          // console.warn(record,value)
+          return record.cam.version.object.type == value
+        }
       },
       { title: 'id', dataIndex: 'cam.id', key: 'id', width: 100, },
 
@@ -176,7 +179,7 @@ export class TableView extends React.Component<Props, State> {
     ];
 
     return (
-      <div>
+      <Content style={{ background: '#fff', height: '100%', padding: '24px' }}>
         <div style={{ marginBottom: 16 }}>
           <span style={{ marginLeft: 8 }}>
             {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
@@ -184,7 +187,8 @@ export class TableView extends React.Component<Props, State> {
         </div>
         <Table
           bordered
-          pagination={{pageSizeOptions: ['10', '25', '50', '100','200'],    showSizeChanger: true,  pageSize: 50 }} scroll={{ y: '60vh' }}
+          size={'small'}
+          pagination={{ pageSizeOptions: ['10', '25', '50', '100', '200'], showSizeChanger: true, pageSize: 200 }} scroll={{ y: '60vh' }}
           columns={columns}
           rowSelection={rowSelection}
           dataSource={data}
@@ -213,7 +217,7 @@ export class TableView extends React.Component<Props, State> {
           <Col span={4} ><div>Column</div></Col>
           <Col span={4} ><div>Column</div></Col> */}
         </Row>
-      </div>
+      </Content>
     )
   }
 

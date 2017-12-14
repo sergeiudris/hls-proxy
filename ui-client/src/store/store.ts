@@ -5,6 +5,8 @@ import { Evt, Cams, Stream, ReadyState, Pkg, FFmpeg, Nginx } from '@streaming/ty
 import * as api from 'src/api'
 import { HlsStreamState } from 'src/types'
 import { HlsStore } from './hls'
+import { Settings } from './settings'
+
 
 export interface Stores {
   store: Store
@@ -14,6 +16,8 @@ export interface Stores {
 export class Store {
 
   hls: HlsStore
+  settings: Settings
+
 
   @observable.ref datasets: Cams.Dataset[] = []
   @observable.ref datasetsInfo: Cams.DatasetInfo[] = []
@@ -24,6 +28,8 @@ export class Store {
 
   constructor() {
     this.hls = new HlsStore(this)
+    this.settings = new Settings(this)
+
   }
 
   @action

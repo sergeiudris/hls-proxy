@@ -29,7 +29,6 @@ interface State {
 //     dispatch: dispatch
 //   })
 // ) as any)
-@withRouter
 export class Sidebar extends React.Component<Props, State> {
 
   onCollapse = (collapsed) => {
@@ -44,44 +43,26 @@ export class Sidebar extends React.Component<Props, State> {
         collapsible
         collapsed={collapsed}
         onCollapse={this.onCollapse}
-        style={{ overflow: 'auto',/*  position: 'fixed',  */left: 0 }}>
+        style={{ overflow: 'hidden',/*  position: 'fixed',  */left: 0 }}>
         <Menu theme="dark" mode="inline" defaultSelectedKeys={[]} selectedKeys={[]}>
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
-            <Menu.Item key="1">
-              <Icon type="user" />
-              <span className="nav-text">nav 1</span>
-            </Menu.Item>
-            <Menu.Item key="2">
-              <Icon type="video-camera" />
-              <span className="nav-text">nav 2</span>
-            </Menu.Item>
-            <Menu.Item key="3">
-              <Icon type="upload" />
-              <span className="nav-text">nav 3</span>
-            </Menu.Item>
-            <Menu.Item key="4">
-              <Icon type="bar-chart" />
-              <span className="nav-text">nav 4</span>
-            </Menu.Item>
-            <Menu.Item key="5">
-              <Icon type="cloud-o" />
-              <span className="nav-text">nav 5</span>
-            </Menu.Item>
-            <Menu.Item key="6">
+          <Menu.Item key="/streams/board">
+            <NavLinkStyled to="/streams/board">
               <Icon type="appstore-o" />
-              <span className="nav-text">nav 6</span>
-            </Menu.Item>
-            <Menu.Item key="7">
-              <Icon type="team" />
-              <span className="nav-text">nav 7</span>
-            </Menu.Item>
-            <Menu.Item key="8">
-              <Icon type="shop" />
-              <span className="nav-text">nav 8</span>
-            </Menu.Item>
-          </Menu>
-
-
+              <span className="nav-text">board</span>
+            </NavLinkStyled>
+          </Menu.Item>
+          <Menu.Item key="/streams/settings">
+            <NavLinkStyled to="/streams/settings">
+              <Icon type="setting" />
+              <span className="nav-text">settings</span>
+            </NavLinkStyled>
+          </Menu.Item>
+          <Menu.Item key="/streams/table">
+            <NavLinkStyled to="/streams/table">
+              <Icon type="table" />
+              <span className="nav-text">table</span>
+            </NavLinkStyled>
+          </Menu.Item>
         </Menu>
         {/* <Menu theme="dark" defaultSelectedKeys={['streams/board']} mode="inline">
           <Menu.Item key="table">

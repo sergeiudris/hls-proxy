@@ -4,5 +4,6 @@ import { Store } from './store'
 
 
 export const store = new Store()
+window['store'] = store
 
 store.fetchDatasets()
