@@ -1,9 +1,0 @@
-ARG REGISTRY_HOST
-ARG NODE_IMAGE
-ARG PORT=1811
-
-FROM ${NODE_IMAGE} as base
-WORKDIR /usr/src/app
-COPY . .
-EXPOSE ${PORT}
-CMD [ "npm", "run", "dev" ]

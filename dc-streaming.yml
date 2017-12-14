@@ -76,31 +76,6 @@ services:
         - NODE_IMAGE=${NODE_IMAGE}
         - PORT=${SPAWN_FFMPEG_PORT}
 
-  ui:
-    image: ${REGISTRY_HOST}/streaming-ui
-    container_name: streaming-ui
-    depends_on:
-      - types
-      - data
-    environment:
-      - PORT=${UI_PORT}
-      - HOSTNAME=${HOSTNAME}
-    env_file:
-      - .env
-    ports:
-      - ${UI_PORT}:${UI_PORT}
-    stdin_open: true
-    tty: true
-
-    build:
-      context: ./ui
-      dockerfile: ./Dockerfile
-      args:
-        - REGISTRY_HOST=${REGISTRY_HOST}
-        - NODE_IMAGE=${NODE_IMAGE}
-        - PORT=${UI_PORT}
-
-
   cam-move:
     image: ${REGISTRY_HOST}/streaming-cam-move
     container_name: streaming-cam-move
@@ -216,28 +191,6 @@ services:
         - PORT=${MJPEG_SERVICE_PORT}
         - PORT_MIN=${MJPEG_SERVICE_PORT_MIN}
         - PORT_MAX=${MJPEG_SERVICE_PORT_MAX}
-
-  # mjpeg-ui:
-  #   image: ${REGISTRY_HOST}/streaming-mjpeg-ui
-  #   container_name: streaming-mjpeg-ui
-  #   ports:
-  #     - ${MJPEG_UI_PORT}:${MJPEG_UI_PORT}
-  #   depends_on:
-  #     - types
-  #     - data
-  #   environment:
-  #     - PORT=${MJPEG_UI_PORT}
-  #   env_file:
-  #     - .env
-  #   stdin_open: true
-  #   tty: true
-  #   build:
-  #     context: ./mjpeg-ui
-  #     dockerfile: ./Dockerfile
-  #     args:
-  #       - REGISTRY_HOST=${REGISTRY_HOST}
-  #       - NODE_IMAGE=${NODE_IMAGE}
-  #       - PORT=${MJPEG_UI_PORT}
 
   ui-client:
     image: ${REGISTRY_HOST}/streaming-ui-client
