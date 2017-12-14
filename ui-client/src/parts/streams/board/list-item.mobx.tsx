@@ -1,0 +1,16 @@
+import * as React from 'react';
+import { inject, observer } from 'mobx-react'
+import { Cams } from '@streaming/types'
+import * as ListItemComp from './list-item'
+import { Store, Stores } from 'src/store'
+
+
+export const ListItem =
+  inject<Stores, ListItemComp.Props, Partial<ListItemComp.Props>, {}>(({ store }, np, ctx) => {
+    // const stream = store.hls.streams.size
+    const props: Partial<ListItemComp.Props> = {
+      onAddToWall: store.hls.addToWall,
+      onSubtractFromWall: store.hls.subtractFromWall
+    }
+    return props
+  })(observer(ListItemComp.ListItem))

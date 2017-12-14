@@ -14,6 +14,7 @@ export interface PlayerState {
 
 export interface HlsStreamState {
   id: string
+  wallCount: number
   player: PlayerState
   cam: Cams.CameraInfo
   state: Stream.State

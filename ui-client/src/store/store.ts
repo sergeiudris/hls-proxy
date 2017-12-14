@@ -69,6 +69,7 @@ function defaultStreamState(cam: Cams.CameraInfo): HlsStreamState {
   return {
     id: cam_url,
     cam: cam,
+    wallCount: 0,
     player: {
       id: cam_url,
       isMoveControlsVisible: false,

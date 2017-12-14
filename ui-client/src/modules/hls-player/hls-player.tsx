@@ -160,6 +160,17 @@ class VideoHls extends React.Component<{
     }
 
   }
+
+  componentWillUnmount(){
+    this.unmount()
+  }
+
+  unmount(){
+    if(this.hls){
+      this.hls.destroy()
+    }
+  }
+
   mount(url: string) {
     console.warn('mount')
     if (this.hls) {

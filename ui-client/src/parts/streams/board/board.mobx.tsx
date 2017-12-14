@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { inject } from 'mobx-react'
+import { inject,observer } from 'mobx-react'
 import { Cams } from '@streaming/types'
 import * as BoardComp from './board'
 import { Store, Stores } from 'src/store'
@@ -10,9 +10,10 @@ export const Board =
     const streamsSize = store.hls.streams.size
     const props: BoardComp.Props = {
       streams: store.hls.streams,
+      streamsSelected: store.hls.streamsSelected
     }
     return props
-  })(BoardComp.Board)
+  })(observer(BoardComp.Board))
 
 // import { ObjectOmit } from "typelevel-ts"; // Thanks @gcanti, we <3 you all!
 

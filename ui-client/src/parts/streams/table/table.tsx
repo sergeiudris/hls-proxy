@@ -180,43 +180,19 @@ export class TableView extends React.Component<Props, State> {
 
     return (
       <Content style={{ background: '#fff', height: '100%', padding: '24px' }}>
-        <div style={{ marginBottom: 16 }}>
-          <span style={{ marginLeft: 8 }}>
-            {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
-          </span>
+        {/* <div style={{ height: '0%', overflow: 'auto' }}>
+          settings
+      </div> */}
+        <div style={{ height: '100%'}}>
+          <Table
+            bordered
+            size={'small'}
+            pagination={{ pageSizeOptions: ['10', '25', '50', '100', '200'], showSizeChanger: true, pageSize: 25 }}
+            columns={columns}
+            rowSelection={rowSelection}
+            dataSource={data}
+          />
         </div>
-        <Table
-          bordered
-          size={'small'}
-          pagination={{ pageSizeOptions: ['10', '25', '50', '100', '200'], showSizeChanger: true, pageSize: 200 }} scroll={{ y: '60vh' }}
-          columns={columns}
-          rowSelection={rowSelection}
-          dataSource={data}
-        />
-        <Row gutter={16}>
-          {
-            // Array.from(streams.values()).map((stream) => {
-            //   const streamInfo = this.data.find(x => x.version.object.cam_url == stream.id)
-            //   return <HlsPlayer
-            //     key={stream.id || streamInfo.id}
-            //     streamInfo={streamInfo}
-            //     streamState={stream}
-            //   />
-            // })
-          }
-          {/* <Col span={4} ><div>Column</div></Col>
-          <Col span={4} ><div>Column</div></Col>
-          <Col span={4} ><div>Column</div></Col>
-          <Col span={4} ><div>Column</div></Col>
-          <Col span={4} ><div>Column</div></Col>
-          <Col span={4} ><div>Column</div></Col>
-          <Col span={4} ><div>Column</div></Col>
-          <Col span={4} ><div>Column</div></Col>
-          <Col span={4} ><div>Column</div></Col>
-          <Col span={4} ><div>Column</div></Col>
-          <Col span={4} ><div>Column</div></Col>
-          <Col span={4} ><div>Column</div></Col> */}
-        </Row>
       </Content>
     )
   }
