@@ -40,7 +40,7 @@ export class Settings extends React.Component<PropsState & PropsDispatch & Props
   render() {
     return (
       <Content style={{ background: '#fff', height: '100%', padding: '24px' }}>
-        sseting
+        settings
       </Content>
     )
   }
