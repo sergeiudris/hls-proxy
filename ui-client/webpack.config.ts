@@ -11,7 +11,7 @@ var StatsWriterPlugin = require("webpack-stats-plugin").StatsWriterPlugin;
 
 
 console.log('> NODE_ENV : ', process.env.NODE_ENV)
-const PORT = process.env.PORT || 1818
+const PORT = process.env.PORT || 3000
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 const DIR_ROOT = path.join(__dirname)
