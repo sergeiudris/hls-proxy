@@ -47,8 +47,14 @@ export class Sidebar extends React.Component<Props, State> {
         <Menu theme="dark" mode="inline" defaultSelectedKeys={[]} selectedKeys={[]}>
           <Menu.Item key="/streams/board">
             <NavLinkStyled to="/streams/board">
-              <Icon type="appstore-o" />
+              <Icon type="video-camera" />
               <span className="nav-text">board</span>
+            </NavLinkStyled>
+          </Menu.Item>
+          <Menu.Item key="/streams/wall">
+            <NavLinkStyled to="/streams/wall">
+              <Icon type="appstore-o" />
+              <span className="nav-text">wall</span>
             </NavLinkStyled>
           </Menu.Item>
           <Menu.Item key="/streams/settings">

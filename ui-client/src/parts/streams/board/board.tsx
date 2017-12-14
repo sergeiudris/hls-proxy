@@ -20,7 +20,6 @@ import { ListItem } from './list-item.mobx'
 export interface Props {
   streams: Map<string, HlsStreamState>
   streamsSelected: Map<string, number>
-
 }
 
 interface State {
@@ -30,7 +29,6 @@ interface State {
 export class Board extends React.Component<Props, State> {
 
   render() {
-    console.log('render board', this.props.streams.size)
     const { streams, streamsSelected } = this.props
     const data = Array.from(streams.values())
 
@@ -44,7 +42,16 @@ export class Board extends React.Component<Props, State> {
       .reduce((p, c) => {
         p = p.concat(c)
         return p
-      },[])
+      }, [])
+      .filter(x => !!x)
+
+
+
+    // data.sort((a, b) => {
+    //   if (b.wallCount) return 1
+    //   if (a.wallCount) return -1
+    //   return 0
+    // })
 
     data.sort((a, b) => {
       if (b.state.readyState != ReadyState.UNSET) return 1
@@ -56,13 +63,15 @@ export class Board extends React.Component<Props, State> {
       <Content style={{ background: '#fff', height: '100%', padding: '24px' }}>
         <div style={{ height: '50%', overflow: 'auto' }}>
           <List
-            grid={{ gutter: 16, xs: 1, sm: 2, md: 4, lg: 4, xl: 6 }}
+            grid={{ gutter: 8, xs: 1, sm: 2, md: 4, lg: 4, xl: 6 }}
             dataSource={selected}
-            renderItem={(stream: HlsStreamState) => (
-              <List.Item key={stream.id} extra={''}>
-                <HlsPlayer streamState={stream.state} streamInfo={stream.cam} />
-              </List.Item>
-            )}
+            renderItem={(stream: HlsStreamState, i) => {
+              return (
+                <List.Item key={`${stream.id}_${i}`} extra={''}>
+                  <HlsPlayer streamState={stream.state} streamInfo={stream.cam} />
+                </List.Item>
+              )
+            }}
           />
         </div>
         <div style={{ height: '50%', overflow: 'auto' }}>
@@ -80,10 +89,3 @@ export class Board extends React.Component<Props, State> {
   }
 
 }
-
-const IconText: React.StatelessComponent<any> = ({ type, text }) => (
-  <span>
-    <Icon type={type} style={{ marginRight: 8 }} />
-    {text}
-  </span>
-);

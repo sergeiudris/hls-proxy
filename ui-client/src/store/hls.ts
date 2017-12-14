@@ -11,7 +11,9 @@ import { Store } from './'
 import { HlsStreamState, PlayerState } from 'src/types'
 import { Sock } from 'src/modules/sock'
 
-
+enum LocalStorage {
+  STREAMS_SELECTED = 'STREAMS_SELECTED'
+}
 
 export class HlsStore {
 
@@ -19,10 +21,20 @@ export class HlsStore {
   sock: Sock
 
   @observable streams = new Map<string, HlsStreamState>()
-  @observable.shallow streamsSelected = new Map<string, number>()
+  streamsSelected: ObservableMap<number>
+
 
   constructor(store: Store) {
     this.store = store
+
+    const streamsSelected = JSON.parse(localStorage.getItem(LocalStorage.STREAMS_SELECTED)) || []
+    // console.log(streamsSelected)
+    this.streamsSelected = observable.shallowMap(streamsSelected)
+
+    this.streamsSelected.observe((changes) => {
+      localStorage.setItem(LocalStorage.STREAMS_SELECTED, JSON.stringify(Array.from(changes.object as any)))
+    })
+
     this.sock = new Sock({
       url: `ws://${config.HUB_HOSTNAME}:${config.HUB_PORT_WSS}`,
       reconnectInterval: 1000,
@@ -40,15 +52,6 @@ export class HlsStore {
     })
   }
 
-  @action
-  selectStream(id: string) {
-    this.streamsSelected.set(id, 1)
-  }
-
-  @action
-  unselectStream(id: string) {
-    this.streamsSelected.delete(id)
-  }
 
   @action
   updateStream(ps: Partial<HlsStreamState>) {
@@ -59,7 +62,7 @@ export class HlsStore {
   @action
   updateStreamState(state: Partial<Stream.State>) {
     const stream = this.streams.get(state.id)
-    if(!stream){
+    if (!stream) {
       console.warn('cold not update stream', state)
       return
     }
@@ -73,26 +76,26 @@ export class HlsStore {
   }
 
   @action
-  addToWall = (id: string) => {
+  addToBoard = (id: string) => {
     const stream = this.streams.get(id)
     // Object.assign(stream,{
     //   wallCount: ++stream.wallCount
     // })
-    const count =  ++stream.wallCount
+    const count = ++stream.wallCount
     this.updateStream({
       id: id,
-      wallCount:count
+      wallCount: count
     })
     this.streamsSelected.set(id, count)
   }
 
   @action
-  subtractFromWall = (id: string) => {
+  subtractFromBoard = (id: string) => {
     const stream = this.streams.get(id)
-    if(stream.wallCount == 0){
+    if (stream.wallCount == 0) {
       return
     }
-    const count =  --stream.wallCount
+    const count = --stream.wallCount
     this.updateStream({
       id: id,
       wallCount: count
@@ -108,55 +111,63 @@ export class HlsStore {
 
     this.updateStreamState(pkg.data.state)
 
-
-    // console.log(`pkg: ${pkg.channel} ${pkg.dataType} ${pkg.type} ${pkg.data.type} ${pkg.data.state.readyState}`)
-
-    // this.update(pkg.data.state)
-
-    // if (evt. == FFmpeg.Cmd.START) {
-    //   const d = evt.data as any as FFmpeg.Data
-    //   const stream = this.streams.find(s => s.props.version.object.cam_url == d.url)
-    //   this.update({
-    //     ...stream,
-    //     status: Status.CONNECTING,
-    //     data: d
-    //   })
-    //   app.sendEvent(evt)
-    // }
-
-    // if ([FFmpeg.Cmd.STARTED, FFmpeg.Cmd.EXISTS].includes(evt.data.cmd)) {
-    //   const d = evt.data as any as FFmpeg.Data
-    //   const stream = this.streams.find(s => s.props.version.object.cam_url == d.url)
-    //   this.update({
-    //     ...stream,
-    //     status: Status.OPEN,
-    //     url_hls: d.url_hls,
-    //     data: d
-    //   })
-    // }
-
-    // if (evt.data.cmd == FFmpeg.Cmd.TERMINATE) {
-    //   const d = evt.data as any as FFmpeg.Data
-    //   const stream = this.streams.find(s => s.props.version.object.cam_url == d.url)
-    //   this.update({
-    //     ...stream,
-    //     status: Status.CLOSING,
-    //     data: d
-    //   })
-    //   app.sendEvent(evt)
-    // }
-
-
-    // if (evt.data.cmd == FFmpeg.Cmd.TERMINATED) {
-    //   const d = evt.data as any as FFmpeg.Data
-    //   const stream = this.streams.find(s => s.props.version.object.cam_url == d.url)
-    //   this.update({
-    //     ...stream,
-    //     status: Status.CLOSED
-    //   })
-    // }
-
   }
 
+
+  onStartStream = (id: string) => {
+    this.sendPkgStream(id, Stream.Type.START)
+  }
+
+  onTerminateStream = (id: string) => {
+    this.sendPkgStream(id, Stream.Type.STOP)
+  }
+
+  sendPkgStream(url: string, type?: Stream.Type) {
+
+    const pkg: Pkg<Pkg.Stream> = {
+      timestamp: Date.now(),
+      topic: Pkg.Topic.STREAMING,
+      channel: 'web',
+      type: Pkg.Type.CMD,
+      dataType: Pkg.DataType.STREAM,
+      data: {
+        type: type,
+        state: {
+          id: url,
+          ffmpeg: {
+            id: url,
+            url_src: url,
+            url_mpd: undefined,
+            url_hls: undefined,
+            msg: undefined,
+            error: undefined,
+            readyState: ReadyState.UNSET,
+            cmdLine: undefined,
+            codecData: undefined
+          },
+          nginx: {
+            id: url,
+            url_src: url,
+            url_hls: undefined,
+            url_mpd: undefined,
+            readyState: ReadyState.UNSET,
+            last_healthcheck: undefined,
+            last_healthcheck_str: undefined,
+            last_status: undefined,
+            msg: undefined,
+            error: undefined,
+          }
+        }
+      }
+    }
+
+    this.send(pkg)
+  }
+
+
+  send(data: Pkg) {
+    console.warn('sending', data)
+    this.sock.socket.send(JSON.stringify(data))
+  }
 
 }

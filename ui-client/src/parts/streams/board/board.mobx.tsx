@@ -10,7 +10,7 @@ export const Board =
     const streamsSize = store.hls.streams.size
     const props: BoardComp.Props = {
       streams: store.hls.streams,
-      streamsSelected: store.hls.streamsSelected
+      streamsSelected: store.hls.streamsSelected as any
     }
     return props
   })(observer(BoardComp.Board))

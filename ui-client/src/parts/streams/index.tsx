@@ -43,7 +43,6 @@ const TableView = asyncComponent(() =>
 export class Streams extends React.Component<Props, State> {
 
   render() {
-    console.warn('render streams', this.props)
     return (
       <Layout style={{ height: '100%' }}>
         <Sidebar />

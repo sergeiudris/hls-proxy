@@ -23,7 +23,7 @@ export class AppHeader extends React.Component<Props, State> {
 
   render() {
 
-    console.log('render header')
+    // console.log('render header')
     return (
       <Header className="header"
         style={{ position: 'fixed', width: '100%', paddingLeft: 0 }}
@@ -66,8 +66,8 @@ export class AppHeader extends React.Component<Props, State> {
           {/* <MenuItem key="table">
             <NavLinkStyled to="/table">table</NavLinkStyled>
           </MenuItem> */}
-          <MenuItem key="settings">
-            <NavLinkStyledPadding to="/settings">settings</NavLinkStyledPadding>
+          <MenuItem key="config">
+            <NavLinkStyledPadding to="/config">config</NavLinkStyledPadding>
           </MenuItem>
         </Menu>
       </Header>

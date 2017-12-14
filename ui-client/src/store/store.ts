@@ -54,7 +54,14 @@ export class Store {
             this.cams = cams
             cams.forEach((cam) => {
               const stream = defaultStreamState(cam)
-              this.hls.streams.set(stream.id || String(stream.cam.id), stream)
+              const id = stream.id || String(stream.cam.id)
+              this.hls.streams.set(id, stream)
+              const streamO = this.hls.streams.get(id)
+              const wallCount = this.hls.streamsSelected.get(streamO.id)
+              if (wallCount) {
+                streamO.wallCount = wallCount
+              }
+
             })
           })
         })

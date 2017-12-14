@@ -34,8 +34,8 @@ const StreamsView = asyncComponent(() =>
   System.import('src/parts/streams').then(module => module.Streams)
 )
 
-const SettingsView = asyncComponent(() =>
-  System.import('src/parts/settings').then(module => module.Settings)
+const ConfigView = asyncComponent(() =>
+  System.import('src/parts/config').then(module => module.Config)
 )
 // const TableView = asyncComponent(() =>
 //   System.import('src/parts/table').then(module => module.Table)
@@ -69,7 +69,7 @@ export class App extends React.Component<any, any>{
                 <Route exact path={`/`} render={() => <Redirect to={'/streams'} />} />
                 <Route path={`/streams`} component={StreamsView} />
                 {/* <Route path={`/table`} component={TableView} /> */}
-                <Route path={`/settings`} component={SettingsView} />
+                <Route path={`/config`} component={ConfigView} />
               </Switch>
             </Content>
           </Layout>

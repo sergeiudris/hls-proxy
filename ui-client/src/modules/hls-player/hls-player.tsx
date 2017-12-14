@@ -1,10 +1,5 @@
 import * as React from 'react'
-import styled from 'src/modules/styled-components'
 import * as Hls from 'hls.js'
-import { connect } from 'react-redux'
-import * as videojs from 'video.js'
-import { Store } from 'src/store'
-import { Button } from 'antd'
 import { ReadyState, Evt, FFmpeg, Cams, Pkg, Stream } from '@streaming/types'
 
 declare var MediaRecorder
@@ -13,7 +8,6 @@ interface IProps {
   className?: string
   streamState: Stream.State
   streamInfo: Cams.CameraInfo
-  store?: Store
 }
 
 interface IState {
@@ -23,11 +17,8 @@ interface IState {
 
 export class HlsPlayer extends React.Component<IProps, IState> {
 
-  video: VideoHls
+  videoHls: VideoHls
   hls: Hls
-  player: videojs.Player
-  canvas: HTMLCanvasElement
-  savedata: any
 
   mediaRecorder: any
   recording = []
@@ -45,7 +36,7 @@ export class HlsPlayer extends React.Component<IProps, IState> {
       isRecording: false
     })
     const blob = new Blob(this.recording, { type: 'video/webm' })
-    saveToDevice(blob)
+    saveToDevice(blob, `${(new Date).getTime()}.webm`)
   }
 
   onerror = () => {
@@ -53,7 +44,7 @@ export class HlsPlayer extends React.Component<IProps, IState> {
   }
 
   onscreenshot = () => {
-    const v = this.video.video
+    const v = this.videoHls.video
     const canvas = document.createElement('canvas')
     const context = canvas.getContext('2d');
     const w = canvas.width = v.videoWidth
@@ -62,17 +53,17 @@ export class HlsPlayer extends React.Component<IProps, IState> {
     context.drawImage(v, 0, 0, w, h);
     const screenshotUrl = canvas.toDataURL('image/png');
     window['fetch'](screenshotUrl).then(f => f.blob()).then((blob) => {
-      saveToDevice(blob, 'test.png')
+      saveToDevice(blob, `${(new Date).getTime()}.png`)
     })
   }
 
-  onrecord = () => {
+  startRecording = () => {
     const { isRecording } = this.state
     if (isRecording) {
       this.mediaRecorder.stop()
       return
     }
-    const video = this.video.video
+    const video = this.videoHls.video
     const stream = video['captureStream']()
     this.mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' })
     const mediaRecorder = this.mediaRecorder
@@ -88,46 +79,59 @@ export class HlsPlayer extends React.Component<IProps, IState> {
     // const stream = video.strea
   }
 
+  stopRecording = () => {
+    if (this.mediaRecorder && !(this.mediaRecorder.state == 'inactive')) {
+      this.mediaRecorder.stop()
+    }
+  }
+
+  onStart = () => {
+    this.videoHls.hls.startLoad()
+  }
+
+  onPause = () => {
+    this.videoHls.hls.stopLoad()
+  }
 
   render() {
 
-    const { streamInfo, streamState, store } = this.props
+    const { streamInfo, streamState } = this.props
     const { isRecording } = this.state
     if (!streamInfo) {
       return null
     }
-    console.log(streamState)
     const { url_hls, url_src } = streamState.ffmpeg
+
+    const buttonStyle: React.CSSProperties = {
+      padding: '0 5px 0 5px',
+      cursor: 'pointer',
+      fontSize: '1.1em'
+    }
+
     return (
-      <div >
-        <h5>{url_src}</h5>
-        <h5>{streamInfo.title}</h5>
-        <VideoHls ref={r => this.video = r} url_hls={streamState.ffmpeg.url_hls} readyState={streamState.readyState} />
-        {/* <canvas style={{display: 'none'}} ref={r =>this.canvas = r}></canvas> */}
-        <h5 >{streamState.readyState}</h5>
-        <h5 >{url_hls}</h5>
-        <Button type="primary" onClick={() => {
-          // store.streams.sendPkgStream(url_src, Stream.Type.START)
-        }
-        }>
-          start
-                 </Button>
-        <Button onClick={() => { this.hls.destroy() }}>
-          stop
-               </Button>
-        <Button onClick={() => {
-          // store.streams.sendPkgStream(url_src, Stream.Type.STOP)
-        }
-        }>
-          terminate
-                </Button>
-        <Button onClick={this.onscreenshot}>
-          screenshott
-                </Button>
-        <Button onClick={this.onrecord}>
-          {isRecording ? 'stop recording' : 'start recording'}
-        </Button>
-      </div>
+      <section style={{ position: 'relative', border: '1px solid black', maxWidth: '240px' }} >
+        <main title={`${streamInfo.title}\n${url_src}`}>
+          <VideoHls ref={r => this.videoHls = r} url_hls={streamState.ffmpeg.url_hls} readyState={streamState.readyState} />
+          <h5 style={{ position: 'absolute', top: '3px', right: '3px', opacity: 0.3 }} >{streamState.readyState}</h5>
+        </main>
+        <footer style={{
+          display: 'flex',
+        }}>
+          <div title={'start'} style={buttonStyle} onClick={this.onStart}>&#9654;</div>
+          <div title={'pasuse'} style={buttonStyle} onClick={this.onPause}>&#10074;&#10074;</div>
+          &nbsp;&nbsp;&nbsp;
+          <div
+            title={isRecording ? 'stop recording' : 'start recording'}
+            style={buttonStyle}>
+            {!isRecording ?
+              <div onClick={this.startRecording}>&#9899;</div>
+              :
+              <div onClick={this.stopRecording}>&#9724;</div>
+            }
+          </div>
+          <div onClick={this.onscreenshot} title={'snapshot'} style={buttonStyle}>&#8853;</div>
+        </footer>
+      </section>
 
     );
   }
@@ -135,15 +139,15 @@ export class HlsPlayer extends React.Component<IProps, IState> {
 
 }
 
-
-class VideoHls extends React.Component<{
+interface VideoHlsProps {
   url_hls: string
   readyState: ReadyState
-}, {}> {
+}
+
+
+class VideoHls extends React.Component<VideoHlsProps, {}> {
   video: HTMLVideoElement
   hls: Hls
-  player: videojs.Player
-  savedata: any
 
   shouldComponentUpdate(np) {
     return np.readyState == ReadyState.OPEN && np.readyState != this.props.readyState
@@ -161,22 +165,19 @@ class VideoHls extends React.Component<{
 
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     this.unmount()
   }
 
-  unmount(){
-    if(this.hls){
+  unmount() {
+    if (this.hls) {
+      console.warn('destroying hls')
       this.hls.destroy()
     }
   }
 
   mount(url: string) {
-    console.warn('mount')
-    if (this.hls) {
-      console.warn('destroying hls')
-      this.hls.destroy()
-    }
+    this.unmount()
 
     if (Hls.isSupported()) {
       var hls = this.hls = new Hls({
@@ -216,7 +217,7 @@ class VideoHls extends React.Component<{
   render() {
 
     return (
-      <video width="300" height="150" className="video-js vjs-default-skin" style={{ border: '1px solid black' }} ref={r => this.video = r} autoPlay controls />
+      <video width="240" height="180" className="video-js vjs-default-skin" style={{ maxWidth: '100%' }} ref={r => this.video = r} autoPlay controls />
     )
 
   }

@@ -38,7 +38,7 @@ interface State {
 //     dispatch: dispatch
 //   })
 // ) as any)
-export class Settings extends React.Component<PropsState & PropsDispatch & Props, State> {
+export class Config extends React.Component<PropsState & PropsDispatch & Props, State> {
 
   render() {
     const formItemLayout = {
