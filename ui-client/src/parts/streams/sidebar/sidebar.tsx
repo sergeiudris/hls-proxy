@@ -48,25 +48,25 @@ export class Sidebar extends React.Component<Props, State> {
           <Menu.Item key="/streams/board">
             <NavLinkStyled to="/streams/board">
               <Icon type="video-camera" />
-              <span className="nav-text">board</span>
+              <span className="nav-text">панель управления</span>
             </NavLinkStyled>
           </Menu.Item>
-          <Menu.Item key="/streams/wall">
+          {/* <Menu.Item key="/streams/wall">
             <NavLinkStyled to="/streams/wall">
               <Icon type="appstore-o" />
-              <span className="nav-text">wall</span>
+              <span className="nav-text">стена</span>
             </NavLinkStyled>
-          </Menu.Item>
+          </Menu.Item> */}
           <Menu.Item key="/streams/settings">
             <NavLinkStyled to="/streams/settings">
               <Icon type="setting" />
-              <span className="nav-text">settings</span>
+              <span className="nav-text">настройки</span>
             </NavLinkStyled>
           </Menu.Item>
           <Menu.Item key="/streams/table">
             <NavLinkStyled to="/streams/table">
               <Icon type="table" />
-              <span className="nav-text">table</span>
+              <span className="nav-text">таблица</span>
             </NavLinkStyled>
           </Menu.Item>
         </Menu>

@@ -36,7 +36,7 @@ export class AppHeader extends React.Component<Props, State> {
           background: 'rgba(255,255,255,.2)',
           // padding: '0 64px'
           width: '200px'
-        }}>streaming-client</h3>
+        }}>стрим</h3>
         <Menu
           theme="dark"
           mode="horizontal"
@@ -45,7 +45,7 @@ export class AppHeader extends React.Component<Props, State> {
           style={{ lineHeight: '64px', height: '64px' }}
         >
           <MenuItem key="streams">
-            <NavLinkStyledPadding to="/streams">streams</NavLinkStyledPadding>
+            <NavLinkStyledPadding to="/streams">камеры</NavLinkStyledPadding>
           </MenuItem>
           {/* <SubMenu
             key="/streams"
@@ -67,7 +67,7 @@ export class AppHeader extends React.Component<Props, State> {
             <NavLinkStyled to="/table">table</NavLinkStyled>
           </MenuItem> */}
           <MenuItem key="config">
-            <NavLinkStyledPadding to="/config">config</NavLinkStyledPadding>
+            <NavLinkStyledPadding to="/config">конфигурация</NavLinkStyledPadding>
           </MenuItem>
         </Menu>
       </Header>
