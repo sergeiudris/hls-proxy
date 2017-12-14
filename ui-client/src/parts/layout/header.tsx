@@ -36,7 +36,7 @@ export class AppHeader extends React.Component<Props, State> {
           background: 'rgba(255,255,255,.2)',
           // padding: '0 64px'
           width: '200px'
-        }}>стрим</h3>
+        }}>видеосервис</h3>
         <Menu
           theme="dark"
           mode="horizontal"
