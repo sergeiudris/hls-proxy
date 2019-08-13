@@ -14,7 +14,7 @@ export namespace Cams {
 
     export enum CamType {
       httpcameras = 3,
-      INTELELCT = 2
+      rtspcameras = 2
     }
 
     export interface CameraInfo {

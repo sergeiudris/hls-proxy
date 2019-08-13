@@ -1,12 +1,12 @@
 [
   {
-    "title": "rtspcameras",
-    "fileName": "rtspcameras.json",
+    "title": "httpcameras",
+    "fileName": "httpcameras.json",
     "type": 2
   },
   {
-    "title": "httpcameras",
-    "fileName": "httpcameras.json",
+    "title": "rtspcameras",
+    "fileName": "rtspcameras.json",
     "type": 3
   }
 ]

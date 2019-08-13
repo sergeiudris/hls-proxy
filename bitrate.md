@@ -4,7 +4,7 @@ wiki
 https://en.wikipedia.org/wiki/Bit_rate#Video
 
 
-youtube: требования и рекомендации
+youtube: .
 https://support.google.com/youtube/answer/1722171?hl=en
 
 
