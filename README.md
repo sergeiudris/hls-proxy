@@ -1,5 +1,5 @@
 
-## streaming
+## hls-proxy
 
 *enviroment variables are in `.env` and `run.sh` files
 
