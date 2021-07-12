@@ -2,7 +2,6 @@
   "name": "@streaming/types",
   "version": "0.0.0",
   "description": "types",
-  "license": "MIT",
   "keywords": [],
   "main": "./dist",
   "types": "./dist",
@@ -10,8 +9,7 @@
     "dist",
     "src",
     "types",
-    "README.md",
-    "LICENSE"
+    "README.md"
   ],
   "scripts": {
     "clean": "rimraf dist/*",
