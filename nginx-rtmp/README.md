@@ -99,3 +99,7 @@ You can start from it and modify it as you need. Here's the [documentation relat
 * It is built from the official sources of **Nginx** and **nginx-rtmp-module** without adding anything else. (Surprisingly, most of the available images that include **nginx-rtmp-module** are made from different sources, old versions or add several other components).
 
 * It has a simple default configuration that should allow you to send one or more streams to it and have several clients receiving multiple copies of those streams simultaneously. (It includes `rtmp_auto_push` and an automatic number of worker processes).
+
+## License
+
+This project is licensed under the terms of the MIT License.
