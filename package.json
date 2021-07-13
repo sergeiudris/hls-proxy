@@ -14,8 +14,6 @@
     "dev": "lerna run --parallel dev",
     "start": "npm run dep && lerna run --parallel start"
   },
-  "author": "",
-  "license": "MIT",
   "dependencies": {},
   "devDependencies": {
     "commitizen": "2.9.6",

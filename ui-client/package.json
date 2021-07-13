@@ -14,8 +14,6 @@
     "build": "rimraf dist && npm run webpack  && mkdirp dist && ncp static dist",
     "start": "npm run build && http-server -p 1818 dist"
   },
-  "author": "",
-  "license": "MIT",
   "dependencies": {},
   "devDependencies": {
     "@streaming/types": "file:../types",
