@@ -1,7 +1,5 @@
-# streaming
-a service that uses nginx-rtsp to proxy video streams to multiple web clients in HLS chunked format
 
-## build
+## streaming
 
 *enviroment variables are in `.env` and `run.sh` files
 
